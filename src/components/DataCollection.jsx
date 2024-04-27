@@ -34,7 +34,7 @@ export default function DataCollection() {
           <Button variant="contained" onClick={() => setIsCameraOn(!isCameraOn)}> {isCameraOn?'Stop': 'Start'} Camera</Button> 
         </Box>
         {isCameraOn ? 
-        <Webcam width={'100%'} height={200} ref={webcamRef} screenshotFormat="image/jpeg"/> : cameraPlaceholder}
+        <Webcam mirrored width={'100%'} height={200} ref={webcamRef} screenshotFormat="image/jpeg"/> : cameraPlaceholder}
       </Grid>
 
 
