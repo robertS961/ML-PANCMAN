@@ -49,6 +49,7 @@ export default function App() {
               marginBottom: 3
             }}
           >
+            {/* part 1 where we collect training data */}
           <DataCollection />
           </Paper>
           <Paper

@@ -52,7 +52,9 @@ export default function DataCollection() {
         <Button variant="outlined" endIcon={directionIcon} onClick={onCapture} disabled={disabled}> Add to </Button> 
       </Box>
       <Box textAlign='center' sx={{width: '100%', height: '100px'}}>
-        {dirImgSrcArr.length>0 && <img width={'100%'} height={'100%'} src={dirImgSrcArr[dirImgSrcArr.length-1].src} />}
+        {dirImgSrcArr.length>0 
+          && 
+        <img width={'100%'} height={'100%'} src={dirImgSrcArr[dirImgSrcArr.length-1].src} style={{padding:'2px'}}/>}
       </Box>
     </Grid>
   }
