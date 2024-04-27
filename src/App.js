@@ -38,7 +38,7 @@ export default function App() {
     }}
   >
     <Toolbar />
-    <Container >
+    <Container sx={{paddingTop: 3}}>
       <Grid container spacing={3}>
         {/* Chart */}
         <Grid item xs={12} md={6} lg={6}>
@@ -48,7 +48,7 @@ export default function App() {
               display: 'flex',
               flexDirection: 'column',
               height: 340,
-              marginBottom: 5
+              marginBottom: 3
             }}
           >
          1
