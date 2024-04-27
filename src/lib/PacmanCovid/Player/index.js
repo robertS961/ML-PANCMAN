@@ -52,7 +52,7 @@ function calcAngle(isRunning, startTime) {
 }
 
 function calcAngleLose({ angle }) {
-  return Math.min(Math.PI * 2, angle + 0.1)
+  return Math.min(Math.PI * 2, angle + 0.5)
 }
 
 export default class Player extends Component {
@@ -66,14 +66,14 @@ export default class Player extends Component {
     this.handleTheEnd = this.handleTheEnd.bind(this);
   }
 
-  componentDidMount() {
-    this.startTime = Date.now();
-    this.setState({
-      timerBite: setInterval(() => this.setState({
-        angle: calcAngle(this.props.isRunning, this.startTime)
-      }), ANIMATION_SPEED)
-    });
-  }
+  // componentDidMount() {
+  //   this.startTime = Date.now();
+  //   this.setState({
+  //     timerBite: setInterval(() => this.setState({
+  //       angle: calcAngle(this.props.isRunning, this.startTime)
+  //     }), ANIMATION_SPEED)
+  //   });
+  // }
 
   timerReset({timerBite, timerLose}) {
     clearInterval(timerBite);
@@ -85,7 +85,15 @@ export default class Player extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // console.log('Player - componentDidUpdate')
+    // start playing
+    if (!prevProps.isRunning && this.props.isRunning) {
+      this.startTime = Date.now();
+      this.setState({
+        timerBite: setInterval(() => this.setState({
+          angle: calcAngle(this.props.isRunning, this.startTime)
+        }), ANIMATION_SPEED)
+      });
+    }
 
     if (!prevProps.lost && this.props.lost) {
       this.timerReset(this.state)
@@ -103,7 +111,7 @@ export default class Player extends Component {
       }, ANIMATION_SPEED);
     }
 
-    setImmediate(() => this.handleTheEnd());
+    this.handleTheEnd()
 
     return null;
   }
@@ -128,7 +136,7 @@ export default class Player extends Component {
 
     this.componentWillUnmount()
     this.setState(initialState)
-    this.componentDidMount()
+    // this.componentDidMount()
   }
 
   render() {

@@ -14,8 +14,6 @@ import Player from './Player';
 //const covid19Banner = require('./assets/images/covid19-banner.min.jpg');
 //const logo = require('./assets/images/covid3.svg');
 
-let $t = require('./locales/pt.json');
-//let $t = require('./locales/en.json');
 
 
 export default class PacmanCovid extends Component {
@@ -56,13 +54,18 @@ export default class PacmanCovid extends Component {
     
     if (prevProps.isRunning !== this.props.isRunning && this.props.isRunning) {
  
-        this.timers.start = setTimeout(() => {
+        // this.timers.start = setTimeout(() => {
 
-          this.setState({ stepTime: Date.now() });
+        //   this.setState({ stepTime: Date.now() });
 
-          this.step();
+        //   this.step();
 
-        }, 3000);
+        // }, 3000);
+        
+
+        this.setState({ stepTime: Date.now() });
+        this.step();
+
         
     }
    
@@ -105,26 +108,26 @@ export default class PacmanCovid extends Component {
     if (this.state.lost ) {
       // show lose dialog
       this.setState({ isShowDialog: true });
-        if (result.value){
-          // Play Again
-          this.componentWillUnmount()
-          this.setState(getInitialState())
-          this.componentDidMount()
-        }
+        // if (result.value){
+        //   // Play Again
+        //   this.componentWillUnmount()
+        //   this.setState(getInitialState())
+        //   this.componentDidMount()
+        // }
      ;
 
     } else {
     //  show win 
-          if (result.value){
-            // Play Again
-            // this.setState({
-            //   isRunning: true
-            // })
-            this.props.setIsRuning(true)
-            this.componentWillUnmount()
-            this.setState(getInitialState())
-            this.componentDidMount()
-          }
+          // if (result.value){
+          //   // Play Again
+          //   // this.setState({
+          //   //   isRunning: true
+          //   // })
+          //   this.props.setIsRuning(true)
+          //   this.componentWillUnmount()
+          //   this.setState(getInitialState())
+          //   this.componentDidMount()
+          // }
    
     }
 
@@ -148,7 +151,7 @@ export default class PacmanCovid extends Component {
     return (
       <div className="wrapper-container">
         <Stage {...props} />
-        <TopBar $t={$t} score={this.state.score} lost={this.state.lost} />
+        <TopBar score={this.state.score} lost={this.state.lost} />
         <AllFood {...props} food={this.state.food} />
         {monsters}
         <Player {...props} {...this.state.player} lost={this.state.lost} isRunning={this.props.isRunning} onEnd={this.handleTheEnd} />

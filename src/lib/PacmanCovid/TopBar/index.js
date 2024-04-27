@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 
 export default function TopBar( { ...props }) {
 
-  const { $t, score } = props;
+  const {score } = props;
 
     return (
         <div className="pacmancovid-topbar">
             <span className="running-score">
-                { $t.scores }{score}
+                score: {score}
             </span>
         </div>
     );
