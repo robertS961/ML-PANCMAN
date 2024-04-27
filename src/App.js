@@ -1,8 +1,7 @@
-
-import Data from "./components/data";
 import Copyright from "./components/Copyright";
 import PacMan from "./components/PacMan";
 import { Box, CssBaseline, AppBar, Toolbar, Drawer, Typography, Divider, List, Container, Grid, Paper,  Badge } from '@mui/material';
+import DataCollection from "./components/DataCollection";
 
 
 
@@ -51,7 +50,7 @@ export default function App() {
               marginBottom: 3
             }}
           >
-         1
+          <DataCollection />
           </Paper>
           <Paper
             sx={{
