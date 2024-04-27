@@ -55,7 +55,7 @@ export default function getInitialState() {
     stepTime: Date.now(),
     score: 0,
     player: {
-      position: [12.5, 6],
+      position: [20, 6],
       direction: EAST,
       nextDirection: EAST,
       lives: 3

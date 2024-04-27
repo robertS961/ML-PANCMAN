@@ -42,27 +42,20 @@ export default class PacmanCovid extends Component {
   }
 
   componentDidMount() {
-    /**
-     * É invocado imediatamente após um componente ser montado (inserido na árvore).
-     * Inicializações que exijam nós do DOM devem vir aqui.
-     * Se precisar carregar data de um endpoint remoto, este é um bom lugar para instanciar sua requisição.
-     * Este método é um bom lugar para colocar qualquer subscrição.
-     * Se fizer isto, não esqueça de desinscrever no componentWillUnmount().
-     */
+   
     this.timers = {
       start: null,
       animate: null
     };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', this.onKey);
 
-    if (!this.props.isRunning) {
-      return
-    }
   }
 
   componentDidUpdate(prevProps) {
-    window.addEventListener('keydown', this.onKey);
-    if (prevProps.isRunning !== this.props.isRunning) {
-      if (this.props.isRunning) {
+    
+    if (prevProps.isRunning !== this.props.isRunning && this.props.isRunning) {
+ 
         this.timers.start = setTimeout(() => {
 
           this.setState({ stepTime: Date.now() });
@@ -70,7 +63,7 @@ export default class PacmanCovid extends Component {
           this.step();
 
         }, 3000);
-      } 
+        
     }
    
   }
@@ -101,9 +94,6 @@ export default class PacmanCovid extends Component {
     this.setState(changeDirection(this.state, { direction }));
   }
 
-  componentWillReceiveProps() {
-    console.log('App - componentWillReceiveProps')
-  }
 
   handleTheEnd() {
     // this.setState({
