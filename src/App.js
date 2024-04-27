@@ -1,6 +1,6 @@
 import Copyright from "./components/Copyright";
 import PacMan from "./components/PacMan";
-import { Box, CssBaseline, AppBar, Toolbar, Drawer, Typography, Divider, List, Container, Grid, Paper,  Badge } from '@mui/material';
+import { Box, CssBaseline, AppBar, Toolbar, Typography, Container, Grid, Paper} from '@mui/material';
 import DataCollection from "./components/DataCollection";
 
 
@@ -46,7 +46,6 @@ export default function App() {
               p: 2,
               display: 'flex',
               flexDirection: 'column',
-              height: 340,
               marginBottom: 3
             }}
           >
