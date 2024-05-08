@@ -20,7 +20,7 @@ return <>
 export default function MLTrain() {
     const [learningRate, setLearningRate] = React.useState(0.0001);
     const [epochs, setEpochs] = React.useState(10);
-    const [batchSize, setBatchSize] = React.useState(0.4);
+    const [batchSize, setBatchSize] = React.useState('40%');
     const [hiddenUnits, setHiddenUnits] = React.useState(100);
     return <Grid container space={2}>
         <Grid item xs={6}>
@@ -30,13 +30,13 @@ export default function MLTrain() {
         <Grid item xs={6}>
             <div className="hyper-params">
                 {/* <label>Learning rate</label> */}
-                {generateSelectComponent('Learning rate', [0.003, 0.001, 0.0001, 0.00001], setLearningRate, learningRate)}
+                {generateSelectComponent('Learning Rate', [0.003, 0.001, 0.0001, 0.00001], setLearningRate, learningRate)}
 
                 {/* <label>Epochs</label> */}
                 {generateSelectComponent('Epochs', [10, 100, 1000], setEpochs, epochs)}
 
-                {/* <label>Batch size</label> */}
-                {generateSelectComponent('Batch size', [1, 0.4, 0.1, 0.05], setBatchSize, batchSize)}
+                {/* <label>Batch size </label> */}
+                {generateSelectComponent('Batch Size (fraction of the dataset)', ['100%', '40%', '10%', '5%'], setBatchSize, batchSize)}
 
                 {/* <label>Hidden units</label> */}
                 {generateSelectComponent('Hidden units', [10, 100, 200], setHiddenUnits, hiddenUnits)}
