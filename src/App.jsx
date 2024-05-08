@@ -1,7 +1,9 @@
 import Copyright from "./components/Copyright";
 import PacMan from "./components/PacMan";
+import MLTrain from "./components/MLTrain";
 import { Box, CssBaseline, AppBar, Toolbar, Typography, Container, Grid, Paper} from '@mui/material';
 import DataCollection from "./components/DataCollection";
+import React from "react";
 
 
 
@@ -60,7 +62,7 @@ export default function App() {
               height: 340,
             }}
           >
-         2
+            <MLTrain />
           </Paper>
         </Grid>
         {/* Recent Deposits */}
