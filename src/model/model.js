@@ -67,5 +67,7 @@ export async function predict(truncatedMobileNet, model, img) {
 }
 
 export const processImg = (img) => {
-    return tf.tidy(() => img.expandDims(0).toFloat().div(127).sub(1));
+    // convert a base64 image to a tensor in tfjs
+    const imageAsTensor = tf.browser.fromPixels(img)
+    return tf.tidy(() => imageAsTensor.expandDims(0).toFloat().div(127).sub(1));
 }
