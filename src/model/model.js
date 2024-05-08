@@ -2,7 +2,7 @@ import * as mobileNet from '@tensorflow-models/mobilenet';
 import * as tf from '@tensorflow/tfjs';
 
 
-export async function loadTruncatedModel() {
+export async function loadTruncatedMobileNet() {
     const mobilenet = await mobileNet.load()
 
     // Truncate the mobilenet model
