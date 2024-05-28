@@ -1,29 +1,27 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import {Dialog, DialogContentText, DialogContent} from '@mui/material';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Dialog, DialogContentText, DialogContent } from "@mui/material";
 
-import { KEY_COMMANDS } from './constants';
-import getInitialState from './state';
-import { animate, changeDirection } from './game';
-import Stage from './Stage';
-import TopBar from './TopBar';
-import AllFood from './Food/All';
-import Monster from './Monster';
-import Player from './Player';
-
+import { KEY_COMMANDS } from "./constants";
+import getInitialState from "./state";
+import { animate, changeDirection } from "./game";
+import Stage from "./Stage";
+import TopBar from "./TopBar";
+import AllFood from "./Food/All";
+import Monster from "./Monster";
+import Player from "./Player";
 
 export default class PacmanCovid extends Component {
   constructor(props) {
     super(props);
 
-    this.props = props
+    this.props = props;
     this.state = {
       ...getInitialState(),
       isShowDialog: false,
       // isRunning: props.isRunning
     };
 
-   
     this.handleTheEnd = this.handleTheEnd.bind(this);
 
     this.onKey = (evt) => {
@@ -35,28 +33,24 @@ export default class PacmanCovid extends Component {
   }
 
   componentDidMount() {
-   
     this.timers = {
       start: null,
-      animate: null
+      animate: null,
     };
-    document.body.style.overflow = 'hidden';
-    window.addEventListener('keydown', this.onKey);
-
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", this.onKey);
   }
 
   componentDidUpdate(prevProps) {
-    
     if (prevProps.isRunning !== this.props.isRunning && this.props.isRunning) {
-        this.setState({ stepTime: Date.now() });
-        this.step();   
+      this.setState({ stepTime: Date.now() });
+      this.step();
     }
   }
 
   componentWillUnmount() {
-    
-    document.body.style.overflow = 'unset';
-    window.removeEventListener('keydown', this.onKey);
+    document.body.style.overflow = "unset";
+    window.removeEventListener("keydown", this.onKey);
 
     clearTimeout(this.timers.start);
     clearTimeout(this.timers.animate);
@@ -66,8 +60,8 @@ export default class PacmanCovid extends Component {
     const result = animate(this.state);
 
     this.setState({
-      ...result
-    })
+      ...result,
+    });
 
     clearTimeout(this.timers.animate);
     this.timers.animate = setTimeout(() => this.step(), 20);
@@ -77,12 +71,9 @@ export default class PacmanCovid extends Component {
     this.setState(changeDirection(this.state, { direction }));
   }
 
-
   handleTheEnd() {
-
-    this.props.setIsRuning(false)
+    this.props.setIsRuning(false);
     this.setState({ isShowDialog: true });
-
   }
 
   render() {
@@ -103,20 +94,25 @@ export default class PacmanCovid extends Component {
         <TopBar score={this.state.score} lost={this.state.lost} />
         <AllFood {...props} food={this.state.food} />
         {monsters}
-        <Player {...props} {...this.state.player} lost={this.state.lost} isRunning={this.props.isRunning} onEnd={this.handleTheEnd} />
+        <Player
+          {...props}
+          {...this.state.player}
+          lost={this.state.lost}
+          isRunning={this.props.isRunning}
+          onEnd={this.handleTheEnd}
+        />
         <Dialog
           open={this.state.isShowDialog}
-          onClose={
-            () => {
-              this.setState({ isShowDialog: false })
-              this.componentWillUnmount()
-              this.setState(getInitialState())
-              this.componentDidMount()
-            }
-          }
+          onClose={() => {
+            this.setState({ isShowDialog: false });
+            this.componentWillUnmount();
+            this.setState(getInitialState());
+            this.componentDidMount();
+          }}
           // open={true}
           aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description">
+          aria-describedby="alert-dialog-description"
+        >
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               <p>You have been infected! </p>
@@ -133,5 +129,5 @@ PacmanCovid.propTypes = {
   isRunning: PropTypes.bool.isRequired,
   setIsRuning: PropTypes.func.isRequired,
   gridSize: PropTypes.number.isRequired,
-  onEnd: PropTypes.func
+  onEnd: PropTypes.func,
 };

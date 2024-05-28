@@ -15,6 +15,7 @@
     "@mui/material": "^5.15.15",
     "@tensorflow-models/mobilenet": "^2.1.1",
     "@tensorflow/tfjs": "^4.19.0",
+    "jotai": "^2.8.2",
     "pacman-react": "0.0.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
