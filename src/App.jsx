@@ -15,6 +15,7 @@ import DataCollection from "./components/DataCollection";
 import React from "react";
 import { atom } from "jotai";
 import { loadTruncatedMobileNet } from "./model/model";
+import { ControllerDataset } from "./model/controller_dataset";
 
 export const imgSrcArrAtom = atom([]);
 export const lossAtom = atom(null);
@@ -24,6 +25,7 @@ export const epochsAtom = atom(10);
 export const batchSizeAtom = atom("40%");
 export const hiddenUnitsAtom = atom(100);
 export const truncatedMobileNetAtom = atom(await loadTruncatedMobileNet());
+export const controllerDatasetAtom = atom(new ControllerDataset(4));
 
 export default function App() {
   return (

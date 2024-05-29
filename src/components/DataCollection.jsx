@@ -8,7 +8,12 @@ import {
 } from "@mui/icons-material/";
 import { useState, useCallback, useRef } from "react";
 import { useAtom } from "jotai";
-import { imgSrcArrAtom } from "../App";
+import {
+  controllerDatasetAtom,
+  imgSrcArrAtom,
+  truncatedMobileNetAtom,
+} from "../App";
+import { processImg } from "../model/model";
 
 const DIRECTIONS = {
   up: <ArrowUpward />,
@@ -19,6 +24,8 @@ const DIRECTIONS = {
 
 export default function DataCollection() {
   const [isCameraOn, setIsCameraOn] = useState(false);
+  const [truncatedMobileNet] = useAtom(truncatedMobileNetAtom);
+  const [controllerDataset] = useAtom(controllerDatasetAtom);
 
   const webcamRef = useRef(null);
   const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom); // e.g., [{src: 'data:image/jpeg;base64...', label: 'up'}]
@@ -27,6 +34,10 @@ export default function DataCollection() {
     const newImageSrc = webcamRef.current.getScreenshot();
 
     if (newImageSrc) {
+      const img = new ImageData(224, 224);
+      img.src = newImageSrc.src;
+      const embedding = truncatedMobileNet.predict(processImg(img));
+      controllerDataset.addExample(embedding, newImageSrc.label);
       setImgSrcArr([...imgSrcArr, { src: newImageSrc, label: direction }]);
     }
   };

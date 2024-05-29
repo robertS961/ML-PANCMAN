@@ -8,13 +8,8 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import {
-  predict,
-  processImg,
-  loadTruncatedMobileNet,
-  buildModel,
-} from "../model/model";
-import { imgSrcArrAtom } from "../App";
+import { buildModel } from "../model/model";
+import { controllerDatasetAtom, imgSrcArrAtom } from "../App";
 import { useAtom } from "jotai";
 import {
   lossAtom,
@@ -58,19 +53,12 @@ export default function MLTrain() {
   const [lossVal, setLossVal] = useAtom(lossAtom);
   const [model, setModel] = useAtom(modelAtom);
   const [truncatedMobileNet] = useAtom(truncatedMobileNetAtom);
-  const controllerDataset = new ControllerDataset(4);
-
-  function processAllImages() {
-    imgSrcArr.map((imgData) => {
-      const img = new ImageData(224, 224);
-      img.src = imgData.src;
-      const embedding = truncatedMobileNet.predict(processImg(img));
-      controllerDataset.addExample(embedding, imgData.label);
-    });
-    trainModel();
-  }
+  const [controllerDataset] = useAtom(controllerDatasetAtom);
 
   function trainModel() {
+    let batchVal = Math.floor(imgSrcArr.length * (parseInt(batchSize) / 100));
+    batchVal = batchVal < 1 ? 1 : batchVal;
+
     setModel(
       buildModel(
         truncatedMobileNet,
@@ -78,7 +66,7 @@ export default function MLTrain() {
         controllerDataset,
         hiddenUnits,
         4,
-        1,
+        batchVal,
         epochs,
         learningRate
       )
@@ -92,7 +80,7 @@ export default function MLTrain() {
           variant="contained"
           color="primary"
           onClick={() => {
-            processAllImages();
+            trainModel();
           }}
         >
           Train
