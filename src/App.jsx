@@ -28,6 +28,7 @@ export const truncatedMobileNetAtom = atom(await loadTruncatedMobileNet());
 export const dataFlagAtom = atom(false);
 export const controllerDatasetAtom = atom(new ControllerDataset(4));
 export const emptySetMessageAtom = atom("");
+export const trainingProgressAtom = atom(0);
 
 export default function App() {
   return (

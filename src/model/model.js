@@ -1,5 +1,7 @@
 import * as mobileNet from "@tensorflow-models/mobilenet";
 import * as tf from "@tensorflow/tfjs";
+import { getDefaultStore, useAtom } from "jotai";
+import { trainingProgressAtom } from "../App";
 
 export async function loadTruncatedMobileNet() {
   // const mobilenet = await mobileNet.load();
@@ -56,6 +58,7 @@ export async function buildModel(
 
   const optimizer = tf.train.adam(learningrate);
   model.compile({ optimizer: optimizer, loss: "categoricalCrossentropy" });
+  const store = getDefaultStore();
 
   model.fit(controllerDataset.xs, controllerDataset.ys, {
     batchSize,
@@ -65,7 +68,14 @@ export async function buildModel(
         setLoss(logs.loss.toFixed(5));
       },
       onTrainEnd: async () => {
+        store.set(trainingProgressAtom, 0);
         console.log("Training has ended.");
+      },
+      onEpochEnd: async (epoch, logs) => {
+        store.set(
+          trainingProgressAtom,
+          Math.floor(((epoch + 1) / epochs) * 100)
+        );
       },
     },
   });

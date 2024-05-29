@@ -6,6 +6,7 @@ import {
   FormControl,
   Grid,
   Typography,
+  LinearProgress,
 } from "@mui/material";
 import React from "react";
 import { buildModel } from "../model/model";
@@ -14,6 +15,7 @@ import {
   dataFlagAtom,
   emptySetMessageAtom,
   imgSrcArrAtom,
+  trainingProgressAtom,
 } from "../App";
 import { useAtom } from "jotai";
 import {
@@ -61,6 +63,7 @@ export default function MLTrain() {
   const [dataFlag] = useAtom(dataFlagAtom);
 
   const [emptySetMessage, setEmptySetMessage] = useAtom(emptySetMessageAtom);
+  const [trainingProgress] = useAtom(trainingProgressAtom);
 
   function trainModel() {
     let batchVal = Math.floor(imgSrcArr.length * (parseInt(batchSize) / 100));
@@ -93,6 +96,15 @@ export default function MLTrain() {
         >
           Train
         </Button>
+        <LinearProgress
+          variant="determinate"
+          value={trainingProgress}
+          style={{
+            display: trainingProgress === 0 ? "none" : "block",
+            width: "75%",
+            marginTop: "10px",
+          }}
+        />
         <Typography variant="h6">
           LOSS: {lossVal === null ? "" : lossVal} <br />
           {emptySetMessage}
