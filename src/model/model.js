@@ -24,7 +24,6 @@ export async function buildModel(
   setLoss,
   controllerDataset,
   hiddenUnits = 100,
-  NUM_CLASSES = 4,
   batchSize = 1,
   epochs = 10,
   learningrate = 0.0001
@@ -47,7 +46,7 @@ export async function buildModel(
       // Layer 2. The number of units of the last layer should correspond
       // to the number of classes we want to predict.
       tf.layers.dense({
-        units: NUM_CLASSES,
+        units: 4,
         kernelInitializer: "varianceScaling",
         useBias: false,
         activation: "softmax",

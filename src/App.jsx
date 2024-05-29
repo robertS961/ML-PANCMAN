@@ -25,7 +25,9 @@ export const epochsAtom = atom(10);
 export const batchSizeAtom = atom("40%");
 export const hiddenUnitsAtom = atom(100);
 export const truncatedMobileNetAtom = atom(await loadTruncatedMobileNet());
+export const dataFlagAtom = atom(false);
 export const controllerDatasetAtom = atom(new ControllerDataset(4));
+export const emptySetMessageAtom = atom("");
 
 export default function App() {
   return (

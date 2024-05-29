@@ -9,7 +9,12 @@ import {
 } from "@mui/material";
 import React from "react";
 import { buildModel } from "../model/model";
-import { controllerDatasetAtom, imgSrcArrAtom } from "../App";
+import {
+  controllerDatasetAtom,
+  dataFlagAtom,
+  emptySetMessageAtom,
+  imgSrcArrAtom,
+} from "../App";
 import { useAtom } from "jotai";
 import {
   lossAtom,
@@ -20,7 +25,6 @@ import {
   learningRateAtom,
   hiddenUnitsAtom,
 } from "../App";
-import { ControllerDataset } from "../model/controller_dataset";
 
 function generateSelectComponent(label, options, handleChange, currentValue) {
   return (
@@ -51,26 +55,30 @@ export default function MLTrain() {
   const [imgSrcArr] = useAtom(imgSrcArrAtom);
 
   const [lossVal, setLossVal] = useAtom(lossAtom);
-  const [model, setModel] = useAtom(modelAtom);
+  const [_, setModel] = useAtom(modelAtom);
   const [truncatedMobileNet] = useAtom(truncatedMobileNetAtom);
   const [controllerDataset] = useAtom(controllerDatasetAtom);
+  const [dataFlag] = useAtom(dataFlagAtom);
+
+  const [emptySetMessage, setEmptySetMessage] = useAtom(emptySetMessageAtom);
 
   function trainModel() {
     let batchVal = Math.floor(imgSrcArr.length * (parseInt(batchSize) / 100));
     batchVal = batchVal < 1 ? 1 : batchVal;
 
-    setModel(
-      buildModel(
-        truncatedMobileNet,
-        setLossVal,
-        controllerDataset,
-        hiddenUnits,
-        4,
-        batchVal,
-        epochs,
-        learningRate
-      )
-    );
+    !dataFlag
+      ? setEmptySetMessage("Please collect some data first!")
+      : setModel(
+          buildModel(
+            truncatedMobileNet,
+            setLossVal,
+            controllerDataset,
+            hiddenUnits,
+            batchVal,
+            epochs,
+            learningRate
+          )
+        );
   }
 
   return (
@@ -86,7 +94,8 @@ export default function MLTrain() {
           Train
         </Button>
         <Typography variant="h6">
-          LOSS: {lossVal === null ? "" : lossVal}
+          LOSS: {lossVal === null ? "" : lossVal} <br />
+          {emptySetMessage}
         </Typography>
       </Grid>
       <Grid item xs={6}>

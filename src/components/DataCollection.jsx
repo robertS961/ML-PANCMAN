@@ -10,6 +10,8 @@ import { useState, useCallback, useRef } from "react";
 import { useAtom } from "jotai";
 import {
   controllerDatasetAtom,
+  dataFlagAtom,
+  emptySetMessageAtom,
   imgSrcArrAtom,
   truncatedMobileNetAtom,
 } from "../App";
@@ -26,6 +28,8 @@ export default function DataCollection() {
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [truncatedMobileNet] = useAtom(truncatedMobileNetAtom);
   const [controllerDataset] = useAtom(controllerDatasetAtom);
+  const [dataFlag, setDataFlag] = useAtom(dataFlagAtom);
+  const [_, setEmptySetMessage] = useAtom(emptySetMessageAtom);
 
   const webcamRef = useRef(null);
   const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom); // e.g., [{src: 'data:image/jpeg;base64...', label: 'up'}]
@@ -37,6 +41,8 @@ export default function DataCollection() {
       const img = new ImageData(224, 224);
       img.src = newImageSrc.src;
       const embedding = truncatedMobileNet.predict(processImg(img));
+      !dataFlag ? (setDataFlag(true), setEmptySetMessage("")) : null;
+
       controllerDataset.addExample(embedding, newImageSrc.label);
       setImgSrcArr([...imgSrcArr, { src: newImageSrc, label: direction }]);
     }
