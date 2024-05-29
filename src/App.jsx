@@ -14,9 +14,16 @@ import {
 import DataCollection from "./components/DataCollection";
 import React from "react";
 import { atom } from "jotai";
+import { loadTruncatedMobileNet } from "./model/model";
 
 export const imgSrcArrAtom = atom([]);
 export const lossAtom = atom(null);
+export const modelAtom = atom(null);
+export const learningRateAtom = atom(0.0001);
+export const epochsAtom = atom(10);
+export const batchSizeAtom = atom("40%");
+export const hiddenUnitsAtom = atom(100);
+export const truncatedMobileNetAtom = atom(await loadTruncatedMobileNet());
 
 export default function App() {
   return (

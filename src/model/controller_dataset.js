@@ -32,9 +32,25 @@ export class ControllerDataset {
    * @param {number} label The label of the example. Should be a number.
    */
   addExample(example, label) {
+    let labelNum;
+    switch (label) {
+      case "up":
+        labelNum = 0;
+        break;
+      case "down":
+        labelNum = 1;
+        break;
+      case "left":
+        labelNum = 2;
+        break;
+      case "right":
+        labelNum = 3;
+        break;
+    }
+
     // One-hot encode the label.
     const y = tf.tidy(() =>
-      tf.oneHot(tf.tensor1d([label]).toInt(), this.numClasses)
+      tf.oneHot(tf.tensor1d([labelNum]).toInt(), this.numClasses)
     );
 
     if (this.xs == null) {

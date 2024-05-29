@@ -16,11 +16,16 @@ import {
 } from "../model/model";
 import { imgSrcArrAtom } from "../App";
 import { useAtom } from "jotai";
-import { lossAtom } from "../App";
+import {
+  lossAtom,
+  modelAtom,
+  truncatedMobileNetAtom,
+  epochsAtom,
+  batchSizeAtom,
+  learningRateAtom,
+  hiddenUnitsAtom,
+} from "../App";
 import { ControllerDataset } from "../model/controller_dataset";
-
-export let model;
-export let truncatedMobileNet = await loadTruncatedMobileNet();
 
 function generateSelectComponent(label, options, handleChange, currentValue) {
   return (
@@ -44,12 +49,15 @@ function generateSelectComponent(label, options, handleChange, currentValue) {
 }
 
 export default function MLTrain() {
-  const [learningRate, setLearningRate] = React.useState(0.0001);
-  const [epochs, setEpochs] = React.useState(10);
-  const [batchSize, setBatchSize] = React.useState("40%");
-  const [hiddenUnits, setHiddenUnits] = React.useState(100);
+  const [learningRate, setLearningRate] = useAtom(learningRateAtom);
+  const [epochs, setEpochs] = useAtom(epochsAtom);
+  const [batchSize, setBatchSize] = useAtom(batchSizeAtom);
+  const [hiddenUnits, setHiddenUnits] = useAtom(hiddenUnitsAtom);
   const [imgSrcArr] = useAtom(imgSrcArrAtom);
+
   const [lossVal, setLossVal] = useAtom(lossAtom);
+  const [model, setModel] = useAtom(modelAtom);
+  const [truncatedMobileNet] = useAtom(truncatedMobileNetAtom);
   const controllerDataset = new ControllerDataset(4);
 
   function processAllImages() {
@@ -57,36 +65,23 @@ export default function MLTrain() {
       const img = new ImageData(224, 224);
       img.src = imgData.src;
       const embedding = truncatedMobileNet.predict(processImg(img));
-      let labelNum;
-      switch (imgData.label) {
-        case "up":
-          labelNum = 0;
-          break;
-        case "down":
-          labelNum = 1;
-          break;
-        case "left":
-          labelNum = 2;
-          break;
-        case "right":
-          labelNum = 3;
-          break;
-      }
-      controllerDataset.addExample(embedding, labelNum);
+      controllerDataset.addExample(embedding, imgData.label);
     });
     trainModel();
   }
 
   function trainModel() {
-    model = buildModel(
-      truncatedMobileNet,
-      setLossVal,
-      controllerDataset,
-      hiddenUnits,
-      4,
-      1,
-      epochs,
-      learningRate
+    setModel(
+      buildModel(
+        truncatedMobileNet,
+        setLossVal,
+        controllerDataset,
+        hiddenUnits,
+        4,
+        1,
+        epochs,
+        learningRate
+      )
     );
   }
 
