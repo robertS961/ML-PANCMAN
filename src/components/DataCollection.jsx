@@ -14,8 +14,12 @@ import {
   emptySetMessageAtom,
   imgSrcArrAtom,
   truncatedMobileNetAtom,
+  batchSizeAtom,
+  dataSetSizeAtom,
+  batchArrayAtom,
 } from "../App";
 import { processImg } from "../model/model";
+import { data } from "@tensorflow/tfjs";
 
 const DIRECTIONS = {
   up: <ArrowUpward />,
@@ -29,10 +33,12 @@ export default function DataCollection() {
   const [truncatedMobileNet] = useAtom(truncatedMobileNetAtom);
   const [controllerDataset] = useAtom(controllerDatasetAtom);
   const [dataFlag, setDataFlag] = useAtom(dataFlagAtom);
-  const [_, setEmptySetMessage] = useAtom(emptySetMessageAtom);
+  const [empySetMessage, setEmptySetMessage] = useAtom(emptySetMessageAtom);
+  const [batchValueArray, setBatchValueArray] = useAtom(batchArrayAtom);
+  const [dataSetSize, setDataSetSize] = useAtom(dataSetSizeAtom);
 
   const webcamRef = useRef(null);
-  const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom); // e.g., [{src: 'data:image/jpeg;base64...', label: 'up'}]
+  const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom);
 
   const capture = (direction) => () => {
     const newImageSrc = webcamRef.current.getScreenshot();
@@ -45,6 +51,20 @@ export default function DataCollection() {
 
       controllerDataset.addExample(embedding, newImageSrc.label);
       setImgSrcArr([...imgSrcArr, { src: newImageSrc, label: direction }]);
+      setDataSetSize(dataSetSize + 1);
+
+      const batchPercentages = [0.05, 0.1, 0.4, 1];
+      let batchValue;
+      let tempBatchValueArray = [];
+
+      batchPercentages.forEach((percentage) => {
+        batchValue = Math.floor(imgSrcArr.length * percentage);
+        batchValue = batchValue < 1 ? 1 : batchValue;
+        if (!tempBatchValueArray.includes(batchValue)) {
+          tempBatchValueArray.push(batchValue);
+        }
+      });
+      setBatchValueArray(tempBatchValueArray);
     }
   };
 

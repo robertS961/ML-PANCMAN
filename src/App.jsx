@@ -22,13 +22,15 @@ export const lossAtom = atom(null);
 export const modelAtom = atom(null);
 export const learningRateAtom = atom(0.0001);
 export const epochsAtom = atom(10);
-export const batchSizeAtom = atom("40%");
+export const batchSizeAtom = atom(1);
+export const batchArrayAtom = atom([1]);
 export const hiddenUnitsAtom = atom(100);
 export const truncatedMobileNetAtom = atom(await loadTruncatedMobileNet());
 export const dataFlagAtom = atom(false);
 export const controllerDatasetAtom = atom(new ControllerDataset(4));
 export const emptySetMessageAtom = atom("");
 export const trainingProgressAtom = atom(0);
+export const dataSetSizeAtom = atom(0);
 
 export default function App() {
   return (

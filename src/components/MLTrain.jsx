@@ -11,8 +11,10 @@ import {
 import React from "react";
 import { buildModel } from "../model/model";
 import {
+  batchArrayAtom,
   controllerDatasetAtom,
   dataFlagAtom,
+  dataSetSizeAtom,
   emptySetMessageAtom,
   imgSrcArrAtom,
   trainingProgressAtom,
@@ -28,7 +30,13 @@ import {
   hiddenUnitsAtom,
 } from "../App";
 
-function generateSelectComponent(label, options, handleChange, currentValue) {
+function generateSelectComponent(
+  label,
+  options,
+  handleChange,
+  currentValue,
+  isDisabled = false
+) {
   return (
     <>
       <InputLabel id="demo-simple-select-label">{label}</InputLabel>
@@ -40,6 +48,7 @@ function generateSelectComponent(label, options, handleChange, currentValue) {
         value={currentValue}
         label={label}
         onChange={(e) => handleChange(e.target.value)}
+        disabled={isDisabled}
       >
         {options.map((option) => (
           <MenuItem value={option}>{option}</MenuItem>
@@ -54,7 +63,7 @@ export default function MLTrain() {
   const [epochs, setEpochs] = useAtom(epochsAtom);
   const [batchSize, setBatchSize] = useAtom(batchSizeAtom);
   const [hiddenUnits, setHiddenUnits] = useAtom(hiddenUnitsAtom);
-  const [imgSrcArr] = useAtom(imgSrcArrAtom);
+  const [batchValueArray, setBatchValueArray] = useAtom(batchArrayAtom);
 
   const [lossVal, setLossVal] = useAtom(lossAtom);
   const [_, setModel] = useAtom(modelAtom);
@@ -65,10 +74,9 @@ export default function MLTrain() {
   const [emptySetMessage, setEmptySetMessage] = useAtom(emptySetMessageAtom);
   const [trainingProgress] = useAtom(trainingProgressAtom);
 
-  function trainModel() {
-    let batchVal = Math.floor(imgSrcArr.length * (parseInt(batchSize) / 100));
-    batchVal = batchVal < 1 ? 1 : batchVal;
+  const [dataSetSize] = useAtom(dataSetSizeAtom);
 
+  function trainModel() {
     !dataFlag
       ? setEmptySetMessage("Please collect some data first!")
       : setModel(
@@ -77,7 +85,7 @@ export default function MLTrain() {
             setLossVal,
             controllerDataset,
             hiddenUnits,
-            batchVal,
+            batchSize,
             epochs,
             learningRate
           )
@@ -108,6 +116,7 @@ export default function MLTrain() {
         <Typography variant="h6">
           LOSS: {lossVal === null ? "" : lossVal} <br />
           {emptySetMessage}
+          Dataset Size: {dataSetSize}
         </Typography>
       </Grid>
       <Grid item xs={6}>
@@ -131,9 +140,10 @@ export default function MLTrain() {
           {/* <label>Batch size </label> */}
           {generateSelectComponent(
             "Batch Size (fraction of the dataset)",
-            ["100%", "40%", "10%", "5%"],
+            batchValueArray,
             setBatchSize,
-            batchSize
+            batchSize,
+            !dataFlag
           )}
 
           {/* <label>Hidden units</label> */}
