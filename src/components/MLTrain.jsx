@@ -115,8 +115,8 @@ export default function MLTrain() {
         />
         <Typography variant="h6">
           LOSS: {lossVal === null ? "" : lossVal} <br />
+          Dataset Size: {dataSetSize} <br />
           {emptySetMessage}
-          Dataset Size: {dataSetSize}
         </Typography>
       </Grid>
       <Grid item xs={6}>
