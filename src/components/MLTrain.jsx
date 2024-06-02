@@ -8,7 +8,7 @@ import {
   Typography,
   LinearProgress,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { buildModel } from "../model/model";
 import {
   batchArrayAtom,
@@ -76,6 +76,16 @@ export default function MLTrain() {
 
   const [dataSetSize] = useAtom(dataSetSizeAtom);
 
+  const [buttonMsg, setButtonMsg] = useState("Train");
+
+  useEffect(() => {
+    if (trainingProgress === 0) {
+      setButtonMsg("Train");
+    } else {
+      setButtonMsg("Stop");
+    }
+  }, [trainingProgress]);
+
   function trainModel() {
     !dataFlag
       ? setEmptySetMessage("Please collect some data first!")
@@ -99,10 +109,12 @@ export default function MLTrain() {
           variant="contained"
           color="primary"
           onClick={() => {
-            trainModel();
+            buttonMsg === "Train"
+              ? trainModel()
+              : console.log("Stop training function here");
           }}
         >
-          Train
+          {buttonMsg}
         </Button>
         <LinearProgress
           variant="determinate"
