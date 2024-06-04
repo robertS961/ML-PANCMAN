@@ -16,8 +16,10 @@ import {
   truncatedMobileNetAtom,
   dataSetSizeAtom,
   batchArrayAtom,
+  batchSizeAtom,
+  modelAtom,
 } from "../App";
-import { processImg } from "../model/model";
+import { predict, processImg } from "../model/model";
 
 const DIRECTIONS = {
   up: <ArrowUpward />,
@@ -35,9 +37,11 @@ export default function DataCollection() {
   const [truncatedMobileNet] = useAtom(truncatedMobileNetAtom);
   const [controllerDataset] = useAtom(controllerDatasetAtom);
   const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom);
+  const [model] = useAtom(modelAtom);
 
   // ---- Configurations ----
   const [, setBatchValueArray] = useAtom(batchArrayAtom);
+  const [, setBatchSize] = useAtom(batchSizeAtom);
 
   // ---- UI Display ----
   const [dataFlag, setDataFlag] = useAtom(dataFlagAtom);
@@ -76,8 +80,22 @@ export default function DataCollection() {
         }
       });
       setBatchValueArray(tempBatchValueArray);
+      tempBatchValueArray.length > 3
+        ? setBatchSize(tempBatchValueArray[2])
+        : setBatchSize(tempBatchValueArray[tempBatchValueArray.length - 1]);
     }
   };
+
+  async function predictDirection() {
+    const img = new ImageData(224, 224);
+    img.src = webcamRef.current.getScreenshot().src;
+    const prediction = await predict(
+      truncatedMobileNet,
+      model,
+      processImg(img)
+    );
+    console.log(prediction);
+  }
 
   const cameraPlaceholder = (
     <Box
