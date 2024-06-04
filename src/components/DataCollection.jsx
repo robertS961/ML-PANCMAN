@@ -6,7 +6,7 @@ import {
   ArrowBack,
   ArrowForward,
 } from "@mui/icons-material/";
-import { useState, useCallback, useRef } from "react";
+import { useState, useRef } from "react";
 import { useAtom } from "jotai";
 import {
   controllerDatasetAtom,
@@ -14,12 +14,10 @@ import {
   emptySetMessageAtom,
   imgSrcArrAtom,
   truncatedMobileNetAtom,
-  batchSizeAtom,
   dataSetSizeAtom,
   batchArrayAtom,
 } from "../App";
 import { processImg } from "../model/model";
-import { data } from "@tensorflow/tfjs";
 
 const DIRECTIONS = {
   up: <ArrowUpward />,
@@ -29,34 +27,47 @@ const DIRECTIONS = {
 };
 
 export default function DataCollection() {
+  // ---- Webcam ----
   const [isCameraOn, setIsCameraOn] = useState(false);
+  const webcamRef = useRef(null);
+
+  // ---- Model Training ----
   const [truncatedMobileNet] = useAtom(truncatedMobileNetAtom);
   const [controllerDataset] = useAtom(controllerDatasetAtom);
-  const [dataFlag, setDataFlag] = useAtom(dataFlagAtom);
-  const [empySetMessage, setEmptySetMessage] = useAtom(emptySetMessageAtom);
-  const [batchValueArray, setBatchValueArray] = useAtom(batchArrayAtom);
-  const [dataSetSize, setDataSetSize] = useAtom(dataSetSizeAtom);
-
-  const webcamRef = useRef(null);
   const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom);
 
+  // ---- Configurations ----
+  const [, setBatchValueArray] = useAtom(batchArrayAtom);
+
+  // ---- UI Display ----
+  const [dataFlag, setDataFlag] = useAtom(dataFlagAtom);
+  const [, setEmptySetMessage] = useAtom(emptySetMessageAtom);
+  const [dataSetSize, setDataSetSize] = useAtom(dataSetSizeAtom);
+
   const capture = (direction) => () => {
+    // Capture image from webcam
     const newImageSrc = webcamRef.current.getScreenshot();
 
+    // If image is not null, proceed with adding it to the dataset
     if (newImageSrc) {
-      const img = new ImageData(224, 224);
+      const img = new ImageData(224, 224); // Setting image size
       img.src = newImageSrc.src;
       const embedding = truncatedMobileNet.predict(processImg(img));
+
+      // Since capture function has been called (with valid image), the dataset is not empty
       !dataFlag ? (setDataFlag(true), setEmptySetMessage("")) : null;
 
+      // Add example to the dataset
       controllerDataset.addExample(embedding, newImageSrc.label);
       setImgSrcArr([...imgSrcArr, { src: newImageSrc, label: direction }]);
       setDataSetSize(dataSetSize + 1);
 
+      // Dynamically calculate possible batch sizes
       const batchPercentages = [0.05, 0.1, 0.4, 1];
       let batchValue;
       let tempBatchValueArray = [];
 
+      // Calculate batch sizes based on percentages, without duplicates
       batchPercentages.forEach((percentage) => {
         batchValue = Math.floor(imgSrcArr.length * percentage);
         batchValue = batchValue < 1 ? 1 : batchValue;
@@ -99,6 +110,16 @@ export default function DataCollection() {
           >
             {" "}
             {isCameraOn ? "Stop" : "Start"} Camera
+          </Button>
+          {/* Temporary prediction button for testing purposes */}
+          <Button
+            variant="contained"
+            onClick={() => {
+              predictDirection();
+            }}
+            sx={{ marginLeft: 0.5 }}
+          >
+            Predict
           </Button>
         </Box>
         {isCameraOn ? (

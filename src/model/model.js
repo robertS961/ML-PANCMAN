@@ -1,4 +1,3 @@
-import * as mobileNet from "@tensorflow-models/mobilenet";
 import * as tf from "@tensorflow/tfjs";
 import { getDefaultStore, useAtom } from "jotai";
 import { trainingProgressAtom } from "../App";
@@ -86,7 +85,8 @@ export async function buildModel(
 export async function predict(truncatedMobileNet, model, img) {
   const embeddings = truncatedMobileNet.predict(img);
 
-  const predictions = await model.classify(embeddings);
+  // const predictions = await model.classify(embeddings);
+  const predictions = await model.predict(embeddings);
   const predictedClass = predictions.as1D().argMax();
   const classId = (await predictedClass.data())[0];
   return classId;

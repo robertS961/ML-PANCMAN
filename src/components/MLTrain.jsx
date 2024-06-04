@@ -3,7 +3,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  FormControl,
   Grid,
   Typography,
   LinearProgress,
@@ -16,7 +15,6 @@ import {
   dataFlagAtom,
   dataSetSizeAtom,
   emptySetMessageAtom,
-  imgSrcArrAtom,
   trainingProgressAtom,
 } from "../App";
 import { useAtom } from "jotai";
@@ -59,25 +57,27 @@ function generateSelectComponent(
 }
 
 export default function MLTrain() {
+  // ---- Configurations ----
   const [learningRate, setLearningRate] = useAtom(learningRateAtom);
   const [epochs, setEpochs] = useAtom(epochsAtom);
   const [batchSize, setBatchSize] = useAtom(batchSizeAtom);
   const [hiddenUnits, setHiddenUnits] = useAtom(hiddenUnitsAtom);
-  const [batchValueArray, setBatchValueArray] = useAtom(batchArrayAtom);
+  const [batchValueArray] = useAtom(batchArrayAtom);
 
-  const [lossVal, setLossVal] = useAtom(lossAtom);
-  const [_, setModel] = useAtom(modelAtom);
+  // ---- Model Training ----
+  const [, setModel] = useAtom(modelAtom);
   const [truncatedMobileNet] = useAtom(truncatedMobileNetAtom);
   const [controllerDataset] = useAtom(controllerDatasetAtom);
-  const [dataFlag] = useAtom(dataFlagAtom);
 
+  // ---- UI Display ----
+  const [lossVal, setLossVal] = useAtom(lossAtom);
+  const [dataFlag] = useAtom(dataFlagAtom);
   const [emptySetMessage, setEmptySetMessage] = useAtom(emptySetMessageAtom);
   const [trainingProgress] = useAtom(trainingProgressAtom);
-
   const [dataSetSize] = useAtom(dataSetSizeAtom);
+  const [buttonMsg, setButtonMsg] = useState("Train"); // Message to be displayed on training button
 
-  const [buttonMsg, setButtonMsg] = useState("Train");
-
+  // Update button message (and function) based on training progress
   useEffect(() => {
     if (trainingProgress === 0) {
       setButtonMsg("Train");
@@ -86,6 +86,7 @@ export default function MLTrain() {
     }
   }, [trainingProgress]);
 
+  // Train the model when called
   function trainModel() {
     !dataFlag
       ? setEmptySetMessage("Please collect some data first!")
