@@ -152,7 +152,7 @@ export default function MLTrain() {
 
           {/* <label>Batch size </label> */}
           {generateSelectComponent(
-            "Batch Size (fraction of the dataset)",
+            "Batch Size",
             batchValueArray,
             setBatchSize,
             batchSize,

@@ -19,7 +19,7 @@ import {
   batchSizeAtom,
   modelAtom,
 } from "../App";
-import { predict, processImg } from "../model/model";
+import { predict, base64ToTensor } from "../model/model";
 
 const DIRECTIONS = {
   up: <ArrowUpward />,
@@ -48,15 +48,14 @@ export default function DataCollection() {
   const [, setEmptySetMessage] = useAtom(emptySetMessageAtom);
   const [dataSetSize, setDataSetSize] = useAtom(dataSetSizeAtom);
 
-  const capture = (direction) => () => {
+  const capture = (direction) => async () => {
     // Capture image from webcam
     const newImageSrc = webcamRef.current.getScreenshot();
 
     // If image is not null, proceed with adding it to the dataset
     if (newImageSrc) {
-      const img = new ImageData(224, 224); // Setting image size
-      img.src = newImageSrc.src;
-      const embedding = truncatedMobileNet.predict(processImg(img));
+      const imgTensor = await base64ToTensor(newImageSrc);
+      const embedding = truncatedMobileNet.predict(imgTensor);
 
       // Since capture function has been called (with valid image), the dataset is not empty
       !dataFlag ? (setDataFlag(true), setEmptySetMessage("")) : null;
@@ -87,14 +86,12 @@ export default function DataCollection() {
   };
 
   async function predictDirection() {
-    const img = new ImageData(224, 224);
-    img.src = webcamRef.current.getScreenshot().src;
-    const prediction = await predict(
-      truncatedMobileNet,
-      model,
-      processImg(img)
-    );
-    console.log(prediction);
+    const newImageSrc = webcamRef.current.getScreenshot();
+    if (newImageSrc) {
+      const imgTensor = await base64ToTensor(newImageSrc);
+      const prediction = await predict(truncatedMobileNet, model, imgTensor);
+      console.log(prediction);
+    }
   }
 
   const cameraPlaceholder = (

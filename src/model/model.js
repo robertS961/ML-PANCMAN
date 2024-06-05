@@ -84,16 +84,42 @@ export async function buildModel(
 
 export async function predict(truncatedMobileNet, model, img) {
   const embeddings = truncatedMobileNet.predict(img);
-
-  // const predictions = await model.classify(embeddings);
   const predictions = await model.predict(embeddings);
   const predictedClass = predictions.as1D().argMax();
   const classId = (await predictedClass.data())[0];
   return classId;
 }
 
-export const processImg = (img) => {
-  // convert a base64 image to a tensor in tfjs
-  const imageAsTensor = tf.browser.fromPixels(img);
-  return tf.tidy(() => imageAsTensor.expandDims(0).toFloat().div(127).sub(1));
-};
+export async function base64ToTensor(base64) {
+  return new Promise((resolve, reject) => {
+    // Create an image element
+    const img = new Image(224, 224);
+    img.crossOrigin = "Anonymous";
+    img.src = base64;
+
+    img.onload = () => {
+      // Set up canvas
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+
+      // Draw image on canvas
+      ctx.drawImage(img, 0, 0);
+
+      // Get image data from canvas
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+      // Convert the image data to a tensor
+      const tensor = tf.browser.fromPixels(imageData);
+
+      // Expand dimensions to include batch size
+      const expandedTensor = tensor.expandDims(0);
+      resolve(expandedTensor);
+    };
+
+    img.onerror = (error) => {
+      reject(error);
+    };
+  });
+}
