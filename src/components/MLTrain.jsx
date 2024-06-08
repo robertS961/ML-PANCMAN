@@ -14,11 +14,7 @@ import {
   controllerDatasetAtom,
   dataFlagAtom,
   dataSetSizeAtom,
-  emptySetMessageAtom,
   trainingProgressAtom,
-} from "../App";
-import { useAtom } from "jotai";
-import {
   lossAtom,
   modelAtom,
   truncatedMobileNetAtom,
@@ -26,7 +22,10 @@ import {
   batchSizeAtom,
   learningRateAtom,
   hiddenUnitsAtom,
-} from "../App";
+} from "./Globals";
+import { useAtom } from "jotai";
+import JSONWriter from "./JSONWriter";
+import JSONLoader from "./JSONLoader";
 
 function generateSelectComponent(
   label,
@@ -72,7 +71,6 @@ export default function MLTrain() {
   // ---- UI Display ----
   const [lossVal, setLossVal] = useAtom(lossAtom);
   const [dataFlag] = useAtom(dataFlagAtom);
-  const [emptySetMessage, setEmptySetMessage] = useAtom(emptySetMessageAtom);
   const [trainingProgress] = useAtom(trainingProgressAtom);
   const [dataSetSize] = useAtom(dataSetSizeAtom);
   const [buttonMsg, setButtonMsg] = useState("Train"); // Message to be displayed on training button
@@ -88,19 +86,17 @@ export default function MLTrain() {
 
   // Train the model when called
   function trainModel() {
-    !dataFlag
-      ? setEmptySetMessage("Please collect some data first!")
-      : setModel(
-          buildModel(
-            truncatedMobileNet,
-            setLossVal,
-            controllerDataset,
-            hiddenUnits,
-            batchSize,
-            epochs,
-            learningRate
-          )
-        );
+    setModel(
+      buildModel(
+        truncatedMobileNet,
+        setLossVal,
+        controllerDataset,
+        hiddenUnits,
+        batchSize,
+        epochs,
+        learningRate
+      )
+    );
   }
 
   return (
@@ -109,6 +105,7 @@ export default function MLTrain() {
         <Button
           variant="contained"
           color="primary"
+          disabled={!dataFlag}
           onClick={() => {
             buttonMsg === "Train"
               ? trainModel()
@@ -129,8 +126,9 @@ export default function MLTrain() {
         <Typography variant="h6">
           LOSS: {lossVal === null ? "" : lossVal} <br />
           Dataset Size: {dataSetSize} <br />
-          {emptySetMessage}
         </Typography>
+        <JSONWriter /> <br />
+        <JSONLoader />
       </Grid>
       <Grid item xs={6}>
         <div className="hyper-params">

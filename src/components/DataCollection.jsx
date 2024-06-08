@@ -1,5 +1,5 @@
 import Webcam from "react-webcam";
-import { Grid, Button, Box, Divider } from "@mui/material";
+import { Grid, Button, Box } from "@mui/material";
 import {
   ArrowUpward,
   ArrowDownward,
@@ -11,14 +11,13 @@ import { useAtom } from "jotai";
 import {
   controllerDatasetAtom,
   dataFlagAtom,
-  emptySetMessageAtom,
   imgSrcArrAtom,
   truncatedMobileNetAtom,
   dataSetSizeAtom,
   batchArrayAtom,
   batchSizeAtom,
   modelAtom,
-} from "../App";
+} from "./Globals";
 import { predict, base64ToTensor } from "../model/model";
 
 const DIRECTIONS = {
@@ -45,7 +44,6 @@ export default function DataCollection() {
 
   // ---- UI Display ----
   const [dataFlag, setDataFlag] = useAtom(dataFlagAtom);
-  const [, setEmptySetMessage] = useAtom(emptySetMessageAtom);
   const [dataSetSize, setDataSetSize] = useAtom(dataSetSizeAtom);
 
   const capture = (direction) => async () => {
@@ -58,7 +56,7 @@ export default function DataCollection() {
       const embedding = truncatedMobileNet.predict(imgTensor);
 
       // Since capture function has been called (with valid image), the dataset is not empty
-      !dataFlag ? (setDataFlag(true), setEmptySetMessage("")) : null;
+      !dataFlag ? setDataFlag(true) : null;
 
       // Add example to the dataset
       controllerDataset.addExample(embedding, newImageSrc.label);

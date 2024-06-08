@@ -1,6 +1,6 @@
 import * as tf from "@tensorflow/tfjs";
-import { getDefaultStore, useAtom } from "jotai";
-import { trainingProgressAtom } from "../App";
+import { getDefaultStore } from "jotai";
+import { trainingProgressAtom } from "../components/Globals";
 
 export async function loadTruncatedMobileNet() {
   // const mobilenet = await mobileNet.load();
