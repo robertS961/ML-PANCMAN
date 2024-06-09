@@ -1,12 +1,8 @@
 import * as tf from "@tensorflow/tfjs";
 import { getDefaultStore } from "jotai";
-import { trainingProgressAtom } from "../components/Globals";
+import { stopTrainingAtom, trainingProgressAtom } from "../components/Globals";
 
 export async function loadTruncatedMobileNet() {
-  // const mobilenet = await mobileNet.load();
-
-  // Truncate the mobilenet model
-  // const layer = mobilenet.getLayer("conv_pw_13_relu");
   const mobilenet = await tf.loadLayersModel(
     "https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json"
   );
@@ -18,6 +14,53 @@ export async function loadTruncatedMobileNet() {
   });
 
   return truncatedMobileNet;
+}
+
+export async function processImages(imgSrcArr, truncatedMobileNet) {
+  let xs = null;
+  let ys = null;
+
+  await Promise.all(
+    imgSrcArr.map(async (image) => {
+      const imgTensor = await base64ToTensor(image.src);
+      const embeddings = truncatedMobileNet.predict(imgTensor);
+
+      let labelNum;
+      switch (image.label) {
+        case "up":
+          labelNum = 0;
+          break;
+        case "down":
+          labelNum = 1;
+          break;
+        case "left":
+          labelNum = 2;
+          break;
+        case "right":
+          labelNum = 3;
+          break;
+      }
+
+      const y = tf.tidy(() => tf.oneHot(tf.tensor1d([labelNum]).toInt(), 4));
+
+      if (xs == null) {
+        xs = tf.keep(embeddings);
+        ys = tf.keep(y);
+      } else {
+        const oldX = xs;
+        xs = tf.keep(oldX.concat(embeddings, 0));
+
+        const oldY = ys;
+        ys = tf.keep(oldY.concat(y, 0));
+
+        oldX.dispose();
+        oldY.dispose();
+        y.dispose();
+      }
+    })
+  );
+
+  return { xs, ys };
 }
 
 export async function buildModel(
@@ -75,6 +118,11 @@ export async function buildModel(
           trainingProgressAtom,
           Math.floor(((epoch + 1) / epochs) * 100)
         );
+        if (store.get(stopTrainingAtom)) {
+          model.stopTraining = true;
+          store.set(stopTrainingAtom, false);
+          console.log("Training has been stopped.");
+        }
       },
     },
   });

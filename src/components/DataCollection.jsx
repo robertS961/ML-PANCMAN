@@ -9,7 +9,6 @@ import {
 import { useState, useRef } from "react";
 import { useAtom } from "jotai";
 import {
-  controllerDatasetAtom,
   dataFlagAtom,
   imgSrcArrAtom,
   truncatedMobileNetAtom,
@@ -34,7 +33,6 @@ export default function DataCollection() {
 
   // ---- Model Training ----
   const [truncatedMobileNet] = useAtom(truncatedMobileNetAtom);
-  const [controllerDataset] = useAtom(controllerDatasetAtom);
   const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom);
   const [model] = useAtom(modelAtom);
 
@@ -52,14 +50,10 @@ export default function DataCollection() {
 
     // If image is not null, proceed with adding it to the dataset
     if (newImageSrc) {
-      const imgTensor = await base64ToTensor(newImageSrc);
-      const embedding = truncatedMobileNet.predict(imgTensor);
-
       // Since capture function has been called (with valid image), the dataset is not empty
       !dataFlag ? setDataFlag(true) : null;
 
       // Add example to the dataset
-      controllerDataset.addExample(embedding, newImageSrc.label);
       setImgSrcArr([...imgSrcArr, { src: newImageSrc, label: direction }]);
       setDataSetSize(dataSetSize + 1);
 

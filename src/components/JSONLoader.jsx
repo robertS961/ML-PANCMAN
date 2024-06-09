@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  controllerDatasetAtom,
   dataFlagAtom,
   emptySetMessageAtom,
   imgSrcArrAtom,
@@ -16,7 +15,6 @@ import { base64ToTensor } from "../model/model";
 
 function LoadJSON() {
   const [truncatedMobileNet] = useAtom(truncatedMobileNetAtom);
-  const [controllerDataset] = useAtom(controllerDatasetAtom);
   const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom);
 
   const [, setBatchValueArray] = useAtom(batchArrayAtom);
@@ -35,10 +33,6 @@ function LoadJSON() {
       let tempBatchValueArray = [];
 
       for (const image of image_data.data) {
-        const imgTensor = await base64ToTensor(image.src);
-        const embedding = truncatedMobileNet.predict(imgTensor);
-        controllerDataset.addExample(embedding, image.label);
-
         newImgSrcArr.push({ src: image.src, label: image.label });
         newDataSetSize += 1;
       }

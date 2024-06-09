@@ -8,10 +8,9 @@ import {
   LinearProgress,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { buildModel } from "../model/model";
+import { buildModel, processImages } from "../model/model";
 import {
   batchArrayAtom,
-  controllerDatasetAtom,
   dataFlagAtom,
   dataSetSizeAtom,
   trainingProgressAtom,
@@ -22,6 +21,8 @@ import {
   batchSizeAtom,
   learningRateAtom,
   hiddenUnitsAtom,
+  stopTrainingAtom,
+  imgSrcArrAtom,
 } from "./Globals";
 import { useAtom } from "jotai";
 import JSONWriter from "./JSONWriter";
@@ -66,7 +67,7 @@ export default function MLTrain() {
   // ---- Model Training ----
   const [, setModel] = useAtom(modelAtom);
   const [truncatedMobileNet] = useAtom(truncatedMobileNetAtom);
-  const [controllerDataset] = useAtom(controllerDatasetAtom);
+  const [imgSrcArr] = useAtom(imgSrcArrAtom);
 
   // ---- UI Display ----
   const [lossVal, setLossVal] = useAtom(lossAtom);
@@ -74,6 +75,7 @@ export default function MLTrain() {
   const [trainingProgress] = useAtom(trainingProgressAtom);
   const [dataSetSize] = useAtom(dataSetSizeAtom);
   const [buttonMsg, setButtonMsg] = useState("Train"); // Message to be displayed on training button
+  const [, setStopTraining] = useAtom(stopTrainingAtom);
 
   // Update button message (and function) based on training progress
   useEffect(() => {
@@ -85,12 +87,12 @@ export default function MLTrain() {
   }, [trainingProgress]);
 
   // Train the model when called
-  function trainModel() {
+  async function trainModel() {
     setModel(
       buildModel(
         truncatedMobileNet,
         setLossVal,
-        controllerDataset,
+        await processImages(imgSrcArr, truncatedMobileNet),
         hiddenUnits,
         batchSize,
         epochs,
@@ -98,6 +100,10 @@ export default function MLTrain() {
       )
     );
   }
+
+  const stopTrain = () => {
+    setStopTraining(true);
+  };
 
   return (
     <Grid container space={2}>
@@ -107,9 +113,7 @@ export default function MLTrain() {
           color="primary"
           disabled={!dataFlag}
           onClick={() => {
-            buttonMsg === "Train"
-              ? trainModel()
-              : console.log("Stop training function here");
+            buttonMsg === "Train" ? trainModel() : stopTrain();
           }}
         >
           {buttonMsg}
