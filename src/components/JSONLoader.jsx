@@ -3,7 +3,6 @@ import {
   dataFlagAtom,
   emptySetMessageAtom,
   imgSrcArrAtom,
-  truncatedMobileNetAtom,
   dataSetSizeAtom,
   batchArrayAtom,
   batchSizeAtom,
@@ -14,7 +13,6 @@ import image_data from "../model/image_data.json";
 import { base64ToTensor } from "../model/model";
 
 function LoadJSON() {
-  const [truncatedMobileNet] = useAtom(truncatedMobileNetAtom);
   const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom);
 
   const [, setBatchValueArray] = useAtom(batchArrayAtom);
@@ -64,7 +62,7 @@ function LoadJSON() {
       onClick={handleClick}
       sx={{ mt: 1 }}
     >
-      Load JSON
+      Load Saved Dataset
     </Button>
   );
 }

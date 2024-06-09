@@ -13,6 +13,8 @@ export async function loadTruncatedMobileNet() {
     outputs: layer.output,
   });
 
+  console.info("Truncated MobileNet model has been loaded.");
+
   return truncatedMobileNet;
 }
 
@@ -69,7 +71,7 @@ export async function buildModel(
   controllerDataset,
   hiddenUnits = 100,
   batchSize = 1,
-  epochs = 10,
+  epochs = 100,
   learningrate = 0.0001
 ) {
   const model = tf.sequential({

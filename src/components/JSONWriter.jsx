@@ -46,7 +46,7 @@ function Base64ArrayToJsonFile() {
       onClick={handleClick}
       disabled={!dataFlag}
     >
-      Download JSON
+      Save Current Dataset
     </Button>
   );
 }

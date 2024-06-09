@@ -1,8 +1,9 @@
 import { atom } from "jotai";
+import { atomWithDefault } from 'jotai/utils';
 import { loadTruncatedMobileNet } from "../model/model";
 
 // ---- Configurations ----
-export const epochsAtom = atom(10); // Number of epochs
+export const epochsAtom = atom(100); // Number of epochs
 export const batchSizeAtom = atom(1); // Selected batch size
 export const batchArrayAtom = atom([1]); // Possible batch sizes
 export const hiddenUnitsAtom = atom(100); // Number of hidden units
@@ -10,7 +11,8 @@ export const learningRateAtom = atom(0.0001); // Learning rate
 
 // ---- Model Training ----
 export const modelAtom = atom(null); // Model
-export const truncatedMobileNetAtom = atom(await loadTruncatedMobileNet()); // truncatedMobileNet
+export const truncatedMobileNetAtom = atom(loadTruncatedMobileNet()); // truncatedMobileNet
+
 export const imgSrcArrAtom = atom([]); // Array of image sources
 
 // ---- UI Display ----
