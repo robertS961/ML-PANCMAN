@@ -61,7 +61,19 @@ export default class PacmanCovid extends Component {
     if (newImageSrc) {
       const imgTensor = await base64ToTensor(newImageSrc);
       const prediction = await predict(truncatedMobileNet, model, imgTensor);
-      return prediction;
+
+      switch (prediction) {
+        case 0:
+          return 1;
+        case 1:
+          return 3;
+        case 2:
+          return 2;
+        case 3:
+          return 0;
+        default:
+          return -1;
+      }
     }
   }
 

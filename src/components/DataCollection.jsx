@@ -11,11 +11,9 @@ import { useAtom } from "jotai";
 import {
   dataFlagAtom,
   imgSrcArrAtom,
-  truncatedMobileNetAtom,
   dataSetSizeAtom,
   batchArrayAtom,
   batchSizeAtom,
-  modelAtom,
 } from "./Globals";
 
 const DIRECTIONS = {
@@ -25,13 +23,11 @@ const DIRECTIONS = {
   right: <ArrowForward />,
 };
 
-export default function DataCollection({webcamRef}) {
+export default function DataCollection({ webcamRef }) {
   const [isCameraOn, setIsCameraOn] = useState(false);
 
   // ---- Model Training ----
-  const [truncatedMobileNet] = useAtom(truncatedMobileNetAtom);
   const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom);
-  const [model] = useAtom(modelAtom);
 
   // ---- Configurations ----
   const [, setBatchValueArray] = useAtom(batchArrayAtom);
