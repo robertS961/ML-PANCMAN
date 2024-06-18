@@ -1,5 +1,4 @@
 import { atom } from "jotai";
-import { atomWithDefault } from 'jotai/utils';
 import { loadTruncatedMobileNet } from "../model/model";
 
 // ---- Configurations ----
@@ -12,7 +11,6 @@ export const learningRateAtom = atom(0.0001); // Learning rate
 // ---- Model Training ----
 export const modelAtom = atom(null); // Model
 export const truncatedMobileNetAtom = atom(loadTruncatedMobileNet()); // truncatedMobileNet
-
 export const imgSrcArrAtom = atom([]); // Array of image sources
 
 // ---- UI Display ----

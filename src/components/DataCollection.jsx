@@ -17,7 +17,6 @@ import {
   batchSizeAtom,
   modelAtom,
 } from "./Globals";
-import { predict, base64ToTensor } from "../model/model";
 
 const DIRECTIONS = {
   up: <ArrowUpward />,
@@ -26,10 +25,8 @@ const DIRECTIONS = {
   right: <ArrowForward />,
 };
 
-export default function DataCollection() {
-  // ---- Webcam ----
+export default function DataCollection({webcamRef}) {
   const [isCameraOn, setIsCameraOn] = useState(false);
-  const webcamRef = useRef(null);
 
   // ---- Model Training ----
   const [truncatedMobileNet] = useAtom(truncatedMobileNetAtom);
@@ -77,15 +74,6 @@ export default function DataCollection() {
     }
   };
 
-  async function predictDirection() {
-    const newImageSrc = webcamRef.current.getScreenshot();
-    if (newImageSrc) {
-      const imgTensor = await base64ToTensor(newImageSrc);
-      const prediction = await predict(truncatedMobileNet, model, imgTensor);
-      console.log(prediction);
-    }
-  }
-
   const cameraPlaceholder = (
     <Box
       display="flex"
@@ -117,16 +105,6 @@ export default function DataCollection() {
           >
             {" "}
             {isCameraOn ? "Stop" : "Start"} Camera
-          </Button>
-          {/* Temporary prediction button for testing purposes */}
-          <Button
-            variant="contained"
-            onClick={() => {
-              predictDirection();
-            }}
-            sx={{ marginLeft: 0.5 }}
-          >
-            Predict
           </Button>
         </Box>
         {isCameraOn ? (

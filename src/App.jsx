@@ -15,6 +15,8 @@ import {
 } from "@mui/material";
 
 export default function App() {
+  const webcamRef = React.useRef(null);
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -54,7 +56,7 @@ export default function App() {
                 }}
               >
                 {/* part 1 where we collect training data */}
-                <DataCollection />
+                <DataCollection webcamRef={webcamRef} />
               </Paper>
               <Paper
                 sx={{
@@ -70,7 +72,7 @@ export default function App() {
             {/* Recent Deposits */}
             <Grid item xs={12} md={6} lg={6}>
               <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                <PacMan />
+                <PacMan webcamRef={webcamRef} />
               </Paper>
             </Grid>
           </Grid>

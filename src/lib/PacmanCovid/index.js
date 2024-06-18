@@ -10,6 +10,9 @@ import TopBar from "./TopBar";
 import AllFood from "./Food/All";
 import Monster from "./Monster";
 import Player from "./Player";
+import { getDefaultStore } from "jotai";
+import { truncatedMobileNetAtom, modelAtom } from "../../components/Globals";
+import { base64ToTensor, predict } from "../../model/model";
 
 export default class PacmanCovid extends Component {
   constructor(props) {
@@ -45,7 +48,40 @@ export default class PacmanCovid extends Component {
     if (prevProps.isRunning !== this.props.isRunning && this.props.isRunning) {
       this.setState({ stepTime: Date.now() });
       this.step();
+      this.predictions();
     }
+  }
+
+  async predictDirection() {
+    const store = getDefaultStore();
+    const truncatedMobileNet = await store.get(truncatedMobileNetAtom);
+    const model = await store.get(modelAtom);
+
+    const newImageSrc = this.props.webcamRef.current.getScreenshot();
+    if (newImageSrc) {
+      const imgTensor = await base64ToTensor(newImageSrc);
+      const prediction = await predict(truncatedMobileNet, model, imgTensor);
+      return prediction;
+    }
+  }
+
+  async predictions() {
+    clearTimeout(this.timers.predictions);
+    if (this.props.isRunning) {
+      this.changeDirection(await this.predictDirection());
+      this.timers.predictions = setTimeout(() => this.predictions(), 1000);
+    }
+  }
+
+  step() {
+    const result = animate(this.state);
+
+    this.setState({
+      ...result,
+    });
+
+    clearTimeout(this.timers.animate);
+    this.timers.animate = setTimeout(() => this.step(), 20);
   }
 
   componentWillUnmount() {
@@ -68,6 +104,7 @@ export default class PacmanCovid extends Component {
   }
 
   changeDirection(direction) {
+    console.log(direction);
     this.setState(changeDirection(this.state, { direction }));
   }
 

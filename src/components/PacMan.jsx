@@ -1,10 +1,9 @@
 import { Button } from "@mui/material";
-
 import "../lib/PacmanCovid/styles/index.scss";
 import PacmanCovid from "../lib/PacmanCovid";
 import { useState } from "react";
 
-export default function PacMan() {
+export default function PacMan({ webcamRef }) {
   const [isRunning, setIsRuning] = useState(false);
   const pacManProps = {
     gridSize: 17,
@@ -21,6 +20,7 @@ export default function PacMan() {
         {...pacManProps}
         isRunning={isRunning}
         setIsRuning={setIsRuning}
+        webcamRef={webcamRef}
       />
       {!isRunning && (
         <Button variant="contained" onClick={() => setIsRuning(!isRunning)}>
