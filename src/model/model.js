@@ -68,6 +68,7 @@ export async function processImages(imgSrcArr, truncatedMobileNet) {
 export async function buildModel(
   truncatedMobileNet,
   setLoss,
+  setAccuracy,
   controllerDataset,
   hiddenUnits = 100,
   batchSize = 1,
@@ -114,6 +115,12 @@ export async function buildModel(
       onTrainEnd: async () => {
         store.set(trainingProgressAtom, 0);
         console.log("Training has ended.");
+        const evalResult = model.evaluate(
+          controllerDataset.xs,
+          controllerDataset.ys
+        );
+        const accuracy = evalResult.dataSync() * 100;
+        setAccuracy(accuracy.toFixed(2));
       },
       onEpochEnd: async (epoch, logs) => {
         store.set(
@@ -138,6 +145,27 @@ export async function predict(truncatedMobileNet, model, img) {
   const predictedClass = predictions.as1D().argMax();
   const classId = (await predictedClass.data())[0];
   return classId;
+}
+
+export async function predictDirection(webcamRef, truncatedMobileNet, model) {
+  const newImageSrc = webcamRef.current.getScreenshot();
+  if (newImageSrc) {
+    const imgTensor = await base64ToTensor(newImageSrc);
+    const prediction = await predict(truncatedMobileNet, model, imgTensor);
+
+    switch (prediction) {
+      case 0:
+        return 1;
+      case 1:
+        return 3;
+      case 2:
+        return 2;
+      case 3:
+        return 0;
+      default:
+        return -1;
+    }
+  }
 }
 
 export async function base64ToTensor(base64) {

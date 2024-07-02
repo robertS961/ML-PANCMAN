@@ -66,13 +66,13 @@ export default function App() {
                   height: 340,
                 }}
               >
-                <MLTrain />
+                <MLTrain webcamRef={webcamRef} />
               </Paper>
             </Grid>
             {/* Recent Deposits */}
             <Grid item xs={12} md={6} lg={6}>
               <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                <PacMan webcamRef={webcamRef} />
+                <PacMan />
               </Paper>
             </Grid>
           </Grid>

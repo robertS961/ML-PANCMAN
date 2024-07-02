@@ -14,6 +14,7 @@ import {
   dataSetSizeAtom,
   batchArrayAtom,
   batchSizeAtom,
+  gameRunningAtom,
 } from "./Globals";
 
 const DIRECTIONS = {
@@ -32,6 +33,7 @@ export default function DataCollection({ webcamRef }) {
   // ---- Configurations ----
   const [, setBatchValueArray] = useAtom(batchArrayAtom);
   const [, setBatchSize] = useAtom(batchSizeAtom);
+  const [gameRunning] = useAtom(gameRunningAtom);
 
   // ---- UI Display ----
   const [dataFlag, setDataFlag] = useAtom(dataFlagAtom);
@@ -98,6 +100,7 @@ export default function DataCollection({ webcamRef }) {
           <Button
             variant="contained"
             onClick={() => setIsCameraOn(!isCameraOn)}
+            disabled={gameRunning}
           >
             {" "}
             {isCameraOn ? "Stop" : "Start"} Camera

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Dialog, DialogContentText, DialogContent } from "@mui/material";
-
 import { KEY_COMMANDS } from "./constants";
 import getInitialState from "./state";
 import { animate, changeDirection } from "./game";
@@ -10,9 +9,6 @@ import TopBar from "./TopBar";
 import AllFood from "./Food/All";
 import Monster from "./Monster";
 import Player from "./Player";
-import { getDefaultStore } from "jotai";
-import { truncatedMobileNetAtom, modelAtom } from "../../components/Globals";
-import { base64ToTensor, predict } from "../../model/model";
 
 export default class PacmanCovid extends Component {
   constructor(props) {
@@ -48,40 +44,10 @@ export default class PacmanCovid extends Component {
     if (prevProps.isRunning !== this.props.isRunning && this.props.isRunning) {
       this.setState({ stepTime: Date.now() });
       this.step();
-      this.predictions();
     }
-  }
-
-  async predictDirection() {
-    const store = getDefaultStore();
-    const truncatedMobileNet = await store.get(truncatedMobileNetAtom);
-    const model = await store.get(modelAtom);
-
-    const newImageSrc = this.props.webcamRef.current.getScreenshot();
-    if (newImageSrc) {
-      const imgTensor = await base64ToTensor(newImageSrc);
-      const prediction = await predict(truncatedMobileNet, model, imgTensor);
-
-      switch (prediction) {
-        case 0:
-          return 1;
-        case 1:
-          return 3;
-        case 2:
-          return 2;
-        case 3:
-          return 0;
-        default:
-          return -1;
-      }
-    }
-  }
-
-  async predictions() {
-    clearTimeout(this.timers.predictions);
-    if (this.props.isRunning) {
-      this.changeDirection(await this.predictDirection());
-      this.timers.predictions = setTimeout(() => this.predictions(), 1000);
+    if (prevProps.predictions !== this.props.predictions) {
+      console.log(this.props.predictions);
+      this.changeDirection(this.props.predictions);
     }
   }
 
@@ -116,7 +82,6 @@ export default class PacmanCovid extends Component {
   }
 
   changeDirection(direction) {
-    console.log(direction);
     this.setState(changeDirection(this.state, { direction }));
   }
 
