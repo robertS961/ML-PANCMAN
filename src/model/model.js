@@ -170,34 +170,34 @@ export async function predictDirection(webcamRef, truncatedMobileNet, model) {
 
 export async function base64ToTensor(base64) {
   return new Promise((resolve, reject) => {
-    // Create an image element
     const img = new Image(224, 224);
     img.crossOrigin = "Anonymous";
-    img.src = base64;
+
+    img.onerror = (error) => {
+      reject(new Error("Failed to load image: " + error.message));
+    };
 
     img.onload = () => {
-      // Set up canvas
       const canvas = document.createElement("canvas");
       canvas.width = img.width;
       canvas.height = img.height;
       const ctx = canvas.getContext("2d");
 
-      // Draw image on canvas
+      if (!ctx) {
+        reject(new Error("Failed to get canvas 2D context"));
+        return;
+      }
+
       ctx.drawImage(img, 0, 0);
-
-      // Get image data from canvas
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-      // Convert the image data to a tensor
-      const tensor = tf.browser.fromPixels(imageData);
-
-      // Expand dimensions to include batch size
+      let tensor = tf.browser.fromPixels(imageData);
+      tensor = tensor.toFloat().div(tf.scalar(127.5)).sub(tf.scalar(1.0));
       const expandedTensor = tensor.expandDims(0);
+
       resolve(expandedTensor);
     };
 
-    img.onerror = (error) => {
-      reject(error);
-    };
+    // Assign the base64 image source
+    img.src = base64;
   });
 }
