@@ -25,7 +25,6 @@ import {
   imgSrcArrAtom,
   gameRunningAtom,
   predictionAtom,
-  accuracyAtom,
 } from "./Globals";
 import { useAtom } from "jotai";
 import JSONWriter from "./JSONWriter";
@@ -76,7 +75,6 @@ export default function MLTrain({ webcamRef }) {
 
   // ---- UI Display ----
   const [lossVal, setLossVal] = useAtom(lossAtom);
-  const [accuracyVal, setAccuracyVal] = useAtom(accuracyAtom);
   const [dataFlag] = useAtom(dataFlagAtom);
   const [trainingProgress] = useAtom(trainingProgressAtom);
   const [dataSetSize] = useAtom(dataSetSizeAtom);
@@ -123,7 +121,6 @@ export default function MLTrain({ webcamRef }) {
       buildModel(
         truncatedMobileNet,
         setLossVal,
-        setAccuracyVal,
         await processImages(imgSrcArr, truncatedMobileNet),
         hiddenUnits,
         batchSize,
@@ -167,7 +164,6 @@ export default function MLTrain({ webcamRef }) {
         />
         <Typography variant="h6">
           LOSS: {lossVal === null ? "" : lossVal} <br />
-          Accuracy: {accuracyVal === null ? "" : accuracyVal + "%"} <br />
           Dataset Size: {dataSetSize} <br />
         </Typography>
         <JSONWriter /> <br />

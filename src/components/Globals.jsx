@@ -17,7 +17,6 @@ export const imgSrcArrAtom = atom([]); // Array of image sources
 
 // ---- UI Display ----
 export const lossAtom = atom(null); // Loss value
-export const accuracyAtom = atom(null); // Accuracy value
 export const emptySetMessageAtom = atom(""); // Message to alert user of empty dataset
 export const trainingProgressAtom = atom(0); // Training progress
 export const dataSetSizeAtom = atom(0); // Size of dataset

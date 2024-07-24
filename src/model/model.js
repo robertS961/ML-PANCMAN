@@ -68,7 +68,6 @@ export async function processImages(imgSrcArr, truncatedMobileNet) {
 export async function buildModel(
   truncatedMobileNet,
   setLoss,
-  setAccuracy,
   controllerDataset,
   hiddenUnits = 100,
   batchSize = 1,
@@ -115,12 +114,6 @@ export async function buildModel(
       onTrainEnd: async () => {
         store.set(trainingProgressAtom, 0);
         console.log("Training has ended.");
-        const evalResult = model.evaluate(
-          controllerDataset.xs,
-          controllerDataset.ys
-        );
-        const accuracy = evalResult.dataSync() * 100;
-        setAccuracy(accuracy.toFixed(2));
       },
       onEpochEnd: async (epoch, logs) => {
         store.set(
