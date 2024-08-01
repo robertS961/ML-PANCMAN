@@ -27,7 +27,7 @@ export default function App() {
           }}
         >
           <Typography component="h1" variant="h3" color="inherit" noWrap>
-            Control your PAC MAN via gestures in the camera!
+            Control PAC MAN via the camera!
           </Typography>
         </Toolbar>
       </AppBar>

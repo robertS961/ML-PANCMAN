@@ -9,10 +9,10 @@ import {
 } from "./Globals";
 import { useAtom } from "jotai";
 import { Button } from "@mui/material";
-import image_data from "../model/image_data.json";
 import { base64ToTensor } from "../model/model";
 
-function LoadJSON() {
+function LoadJSONButton() {
+
   const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom);
 
   const [, setBatchValueArray] = useAtom(batchArrayAtom);
@@ -23,6 +23,9 @@ function LoadJSON() {
   const [dataSetSize, setDataSetSize] = useAtom(dataSetSizeAtom);
 
   const handleClick = async () => {
+    const res = await fetch('../asset/image_data.json')
+    const image_data = await res.json()
+    
     if (image_data.data.length > 0) {
       let newImgSrcArr = [...imgSrcArr];
       let newDataSetSize = dataSetSize;
@@ -67,4 +70,4 @@ function LoadJSON() {
   );
 }
 
-export default LoadJSON;
+export default LoadJSONButton;
