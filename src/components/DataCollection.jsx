@@ -81,8 +81,8 @@ export default function DataCollection({ webcamRef }) {
       sx={{
         p: 2,
         border: "1px dashed grey",
-        height: "200px",
-        width: "250px",
+        height: "224px",
+        width: "224px",
         margin: "auto",
         backgroundColor: "#ddd",
       }}
@@ -95,7 +95,15 @@ export default function DataCollection({ webcamRef }) {
     <Grid container>
       {/* first row */}
 
-      <Grid item xs={12} sx={{ marginBottom: 2 }}>
+      <Grid
+        item
+        xs={12}
+        sx={{ marginBottom: 2 }}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        flexDirection="column"
+      >
         <Box textAlign="center">
           <Button
             variant="contained"
@@ -106,17 +114,24 @@ export default function DataCollection({ webcamRef }) {
             {isCameraOn ? "Stop" : "Start"} Camera
           </Button>
         </Box>
-        {isCameraOn ? (
-          <Webcam
-            mirrored
-            width={"100%"}
-            height={200}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-          />
-        ) : (
-          cameraPlaceholder
-        )}
+        <Box sx={{ marginTop: 1 }}>
+          {isCameraOn ? (
+            <Webcam
+              mirrored
+              width={224}
+              height={224}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              videoConstraints={{
+                width: 224,
+                height: 224,
+                facingMode: "user",
+              }}
+            />
+          ) : (
+            cameraPlaceholder
+          )}
+        </Box>
       </Grid>
 
       {Object.keys(DIRECTIONS).map((directionKey) => {
@@ -151,7 +166,6 @@ const OneDirection = ({ directionIcon, onCapture, dirImgSrcArr, disabled }) => {
       <Box textAlign="center" sx={{ width: "100%", height: "100px" }}>
         {dirImgSrcArr.length > 0 && (
           <img
-            width={"100%"}
             height={"100%"}
             src={dirImgSrcArr[dirImgSrcArr.length - 1].src}
             style={{ padding: "2px" }}
