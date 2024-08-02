@@ -1,6 +1,6 @@
 import * as tf from "@tensorflow/tfjs";
 import { getDefaultStore } from "jotai";
-import { stopTrainingAtom, trainingProgressAtom } from "../components/Globals";
+import { stopTrainingAtom, trainingProgressAtom } from "../GlobalState";
 
 export async function loadTruncatedMobileNet() {
   const mobilenet = await tf.loadLayersModel(
@@ -112,7 +112,8 @@ export async function buildModel(
         setLoss(logs.loss.toFixed(5));
       },
       onTrainEnd: async () => {
-        store.set(trainingProgressAtom, 0);
+        store.set(trainingProgressAtom, -1);
+
         console.log("Training has ended.");
       },
       onEpochEnd: async (epoch, logs) => {
