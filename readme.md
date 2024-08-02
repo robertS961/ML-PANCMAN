@@ -1,5 +1,7 @@
 # Play Pac-Man using Gestures: Teach an ML model to read your gestures in your web browser
 
+This project is part of the programming lab for the UMN CSCI 8980 course: Visualization with AI.
+
 <img width="1776" alt="image" src="https://github.com/user-attachments/assets/eb05a80e-fc76-426c-834f-d5ab68b31522">
 
 
