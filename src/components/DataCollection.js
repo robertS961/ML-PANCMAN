@@ -35,7 +35,6 @@ export default function DataCollection({ webcamRef }) {
     const [gameRunning] = useAtom(gameRunningAtom);
 
     // ---- UI Display ----
-    const [dataSetSize, setDataSetSize] = useAtom(dataSetSizeAtom);
 
     const capture = (direction) => async () => {
         // Capture image from webcam
@@ -46,7 +45,6 @@ export default function DataCollection({ webcamRef }) {
 
             // Add example to the dataset
             setImgSrcArr([...imgSrcArr, { src: newImageSrc, label: direction }]);
-            setDataSetSize(dataSetSize + 1);
 
             // Dynamically calculate possible batch sizes
             const batchPercentages = [0.05, 0.1, 0.4, 1];

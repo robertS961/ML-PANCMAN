@@ -11,7 +11,6 @@ import React, { useEffect, useState, Suspense, useRef } from "react";
 import { buildModel, processImages, predictDirection } from "../model";
 import {
     batchArrayAtom,
-    dataSetSizeAtom,
     trainingProgressAtom,
     lossAtom,
     modelAtom,
@@ -76,7 +75,6 @@ export default function MLTrain({ webcamRef }) {
     // ---- UI Display ----
     const [lossVal, setLossVal] = useAtom(lossAtom);
     const [trainingProgress, setTrainingProgress] = useAtom(trainingProgressAtom);
-    const [dataSetSize] = useAtom(dataSetSizeAtom);
     
     const [, setStopTraining] = useAtom(stopTrainingAtom);
 
@@ -155,7 +153,7 @@ export default function MLTrain({ webcamRef }) {
                 />
                 <Typography variant="h6">
                     LOSS: {lossVal === null ? "" : lossVal} <br />
-                    Dataset Size: {dataSetSize} <br />
+                    Dataset Size: {imgSrcArr.length} <br />
                 </Typography>
                 {/* <JSONWriter /> <br /> */}
             </Grid>
@@ -200,7 +198,7 @@ export default function MLTrain({ webcamRef }) {
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            {dataSetSize === 0 ? EmptyDatasetDisaply : ReguarlDisplay}
+            {imgSrcArr.length === 0 ? EmptyDatasetDisaply : ReguarlDisplay}
         </Suspense>
     );
 }

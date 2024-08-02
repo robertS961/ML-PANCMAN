@@ -13,12 +13,11 @@ export const predictionAtom = atom(null); // Current prediction
 // ---- Model Training ----
 export const modelAtom = atom(null); // Model
 export const truncatedMobileNetAtom = atom(loadTruncatedMobileNet()); // truncatedMobileNet
-export const imgSrcArrAtom = atom([]); // Array of image sources
+export const imgSrcArrAtom = atom([]); // collected images, formate {src: string, label: string}
 
 // ---- UI Display ----
 export const lossAtom = atom(null); // Loss value
 export const trainingProgressAtom = atom(-1); // Training progress
-export const dataSetSizeAtom = atom(0); // Size of dataset
 export const stopTrainingAtom = atom(false); // Flag to stop training
 
 

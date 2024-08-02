@@ -1,7 +1,6 @@
 import React from "react";
 import {
     imgSrcArrAtom,
-    dataSetSizeAtom,
     batchArrayAtom,
     batchSizeAtom,
 } from "../GlobalState";
@@ -15,26 +14,21 @@ function LoadJSONButton() {
     const [, setBatchValueArray] = useAtom(batchArrayAtom);
     const [, setBatchSize] = useAtom(batchSizeAtom);
 
-    const [dataSetSize, setDataSetSize] = useAtom(dataSetSizeAtom);
-
     const handleClick = async () => {
         const res = await fetch('../asset/image_data.json')
         const image_data = await res.json()
 
         if (image_data.data.length > 0) {
             let newImgSrcArr = [...imgSrcArr];
-            let newDataSetSize = dataSetSize;
             const batchPercentages = [0.05, 0.1, 0.4, 1];
             let batchValue;
             let tempBatchValueArray = [];
 
             for (const image of image_data.data) {
                 newImgSrcArr.push({ src: image.src, label: image.label });
-                newDataSetSize += 1;
             }
 
             setImgSrcArr(newImgSrcArr);
-            setDataSetSize(newDataSetSize);
 
             batchPercentages.forEach((percentage) => {
                 batchValue = Math.floor(newImgSrcArr.length * percentage);
