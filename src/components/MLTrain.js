@@ -172,7 +172,7 @@ export default function MLTrain({ webcamRef }) {
                     {/* <label>Epochs</label> */}
                     {generateSelectComponent(
                         "Epochs",
-                        [10, 100, 1000],
+                        [10, 100, 200, 500],
                         setEpochs,
                         epochs
                     )}
