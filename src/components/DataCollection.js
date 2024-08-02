@@ -30,7 +30,6 @@ export default function DataCollection({ webcamRef }) {
     const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom);
 
     // ---- Configurations ----
-    const [, setBatchValueArray] = useAtom(batchArrayAtom);
     const [, setBatchSize] = useAtom(batchSizeAtom);
     const [gameRunning] = useAtom(gameRunningAtom);
 
@@ -45,24 +44,7 @@ export default function DataCollection({ webcamRef }) {
 
             // Add example to the dataset
             setImgSrcArr([...imgSrcArr, { src: newImageSrc, label: direction }]);
-
-            // Dynamically calculate possible batch sizes
-            const batchPercentages = [0.05, 0.1, 0.4, 1];
-            let batchValue;
-            let tempBatchValueArray = [];
-
-            // Calculate batch sizes based on percentages, without duplicates
-            batchPercentages.forEach((percentage) => {
-                batchValue = Math.floor(imgSrcArr.length * percentage);
-                batchValue = batchValue < 1 ? 1 : batchValue;
-                if (!tempBatchValueArray.includes(batchValue)) {
-                    tempBatchValueArray.push(batchValue);
-                }
-            });
-            setBatchValueArray(tempBatchValueArray);
-            tempBatchValueArray.length > 3
-                ? setBatchSize(tempBatchValueArray[2])
-                : setBatchSize(tempBatchValueArray[tempBatchValueArray.length - 1]);
+            setBatchSize(Math.floor(imgSrcArr.length * 0.4));
         }
     };
 

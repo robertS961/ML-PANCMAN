@@ -10,8 +10,6 @@ import { Button } from "@mui/material";
 function LoadJSONButton() {
 
     const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom);
-
-    const [, setBatchValueArray] = useAtom(batchArrayAtom);
     const [, setBatchSize] = useAtom(batchSizeAtom);
 
     const handleClick = async () => {
@@ -20,29 +18,14 @@ function LoadJSONButton() {
 
         if (image_data.data.length > 0) {
             let newImgSrcArr = [...imgSrcArr];
-            const batchPercentages = [0.05, 0.1, 0.4, 1];
-            let batchValue;
-            let tempBatchValueArray = [];
+            
 
             for (const image of image_data.data) {
                 newImgSrcArr.push({ src: image.src, label: image.label });
             }
 
             setImgSrcArr(newImgSrcArr);
-
-            batchPercentages.forEach((percentage) => {
-                batchValue = Math.floor(newImgSrcArr.length * percentage);
-                batchValue = batchValue < 1 ? 1 : batchValue;
-                if (!tempBatchValueArray.includes(batchValue)) {
-                    tempBatchValueArray.push(batchValue);
-                }
-            });
-            setBatchValueArray(tempBatchValueArray);
-            tempBatchValueArray.length > 3
-                ? setBatchSize(tempBatchValueArray[2])
-                : setBatchSize(tempBatchValueArray[tempBatchValueArray.length - 1]);
-
-            setEmptySetMessage("");
+            setBatchSize(Math.floor(newImgSrcArr.length * 0.4));
         }
     };
 

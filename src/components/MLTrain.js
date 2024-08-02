@@ -61,9 +61,7 @@ export default function MLTrain({ webcamRef }) {
     // ---- Configurations ----
     const [learningRate, setLearningRate] = useAtom(learningRateAtom);
     const [epochs, setEpochs] = useAtom(epochsAtom);
-    const [batchSize, setBatchSize] = useAtom(batchSizeAtom);
     const [hiddenUnits, setHiddenUnits] = useAtom(hiddenUnitsAtom);
-    const [batchValueArray] = useAtom(batchArrayAtom);
     const [isRunning] = useAtom(gameRunningAtom);
     const [, setPredictionDirection] = useAtom(predictionAtom);
 
@@ -75,6 +73,10 @@ export default function MLTrain({ webcamRef }) {
     // ---- UI Display ----
     const [lossVal, setLossVal] = useAtom(lossAtom);
     const [trainingProgress, setTrainingProgress] = useAtom(trainingProgressAtom);
+
+
+    const [batchSize, setBatchSize] = useAtom(batchSizeAtom);
+    const batchValueArray = [0.05, 0.1, 0.4, 1].map(r=>Math.floor(imgSrcArr.length * r));
     
     const [, setStopTraining] = useAtom(stopTrainingAtom);
 

@@ -4,7 +4,6 @@ import { loadTruncatedMobileNet } from "./model";
 // ---- Configurations ----
 export const epochsAtom = atom(100); // Number of epochs
 export const batchSizeAtom = atom(1); // Selected batch size
-export const batchArrayAtom = atom([1]); // Possible batch sizes
 export const hiddenUnitsAtom = atom(100); // Number of hidden units
 export const learningRateAtom = atom(0.0001); // Learning rate
 export const gameRunningAtom = atom(false); // Game state
