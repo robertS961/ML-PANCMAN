@@ -37,3 +37,10 @@ Check out the [Live Demo](https://qianwen.info/ML-PACMAN/)
   The project will open in your default web browser.
   Any code changes will automatically update the webpage.
   Google Chrome is recommended for the development.
+  
+### Acknowledgement
+This project is a modified version based on the official TensorFlow.js demos. 
+For more information and additional context, visit [TensorFlow.js](https://www.tensorflow.org/js/demos).
+
+The PANC-MAN uses the implementation at https://github.com/astraube/pacman-covid-19/
+
