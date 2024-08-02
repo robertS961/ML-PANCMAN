@@ -1,11 +1,10 @@
 import React from "react";
-import { dataFlagAtom, imgSrcArrAtom } from "../GlobalState";
+import { imgSrcArrAtom } from "../GlobalState";
 import { useAtom } from "jotai";
 import { Button } from "@mui/material";
 
 function Base64ArrayToJsonFile() {
     const [base64Array] = useAtom(imgSrcArrAtom);
-    const [dataFlag] = useAtom(dataFlagAtom);
 
     const handleClick = () => {
         if (base64Array.length === 0) {
@@ -44,7 +43,6 @@ function Base64ArrayToJsonFile() {
             variant="contained"
             color="primary"
             onClick={handleClick}
-            disabled={!dataFlag}
         >
             Save Current Dataset
         </Button>

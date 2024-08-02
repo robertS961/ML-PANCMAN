@@ -17,10 +17,8 @@ export const imgSrcArrAtom = atom([]); // Array of image sources
 
 // ---- UI Display ----
 export const lossAtom = atom(null); // Loss value
-export const emptySetMessageAtom = atom(""); // Message to alert user of empty dataset
 export const trainingProgressAtom = atom(-1); // Training progress
 export const dataSetSizeAtom = atom(0); // Size of dataset
-export const dataFlagAtom = atom(false); // Flag to indicate if dataset is empty
 export const stopTrainingAtom = atom(false); // Flag to stop training
 
 

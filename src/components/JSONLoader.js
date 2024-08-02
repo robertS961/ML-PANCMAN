@@ -1,7 +1,5 @@
 import React from "react";
 import {
-    dataFlagAtom,
-    emptySetMessageAtom,
     imgSrcArrAtom,
     dataSetSizeAtom,
     batchArrayAtom,
@@ -17,8 +15,6 @@ function LoadJSONButton() {
     const [, setBatchValueArray] = useAtom(batchArrayAtom);
     const [, setBatchSize] = useAtom(batchSizeAtom);
 
-    const [, setDataFlag] = useAtom(dataFlagAtom);
-    const [, setEmptySetMessage] = useAtom(emptySetMessageAtom);
     const [dataSetSize, setDataSetSize] = useAtom(dataSetSizeAtom);
 
     const handleClick = async () => {
@@ -52,7 +48,6 @@ function LoadJSONButton() {
                 ? setBatchSize(tempBatchValueArray[2])
                 : setBatchSize(tempBatchValueArray[tempBatchValueArray.length - 1]);
 
-            setDataFlag(true);
             setEmptySetMessage("");
         }
     };

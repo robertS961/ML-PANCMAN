@@ -9,7 +9,6 @@ import {
 import { useState, useRef } from "react";
 import { useAtom } from "jotai";
 import {
-    dataFlagAtom,
     imgSrcArrAtom,
     dataSetSizeAtom,
     batchArrayAtom,
@@ -36,7 +35,6 @@ export default function DataCollection({ webcamRef }) {
     const [gameRunning] = useAtom(gameRunningAtom);
 
     // ---- UI Display ----
-    const [dataFlag, setDataFlag] = useAtom(dataFlagAtom);
     const [dataSetSize, setDataSetSize] = useAtom(dataSetSizeAtom);
 
     const capture = (direction) => async () => {
@@ -45,8 +43,6 @@ export default function DataCollection({ webcamRef }) {
 
         // If image is not null, proceed with adding it to the dataset
         if (newImageSrc) {
-            // Since capture function has been called (with valid image), the dataset is not empty
-            !dataFlag ? setDataFlag(true) : null;
 
             // Add example to the dataset
             setImgSrcArr([...imgSrcArr, { src: newImageSrc, label: direction }]);

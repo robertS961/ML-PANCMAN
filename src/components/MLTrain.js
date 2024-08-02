@@ -11,7 +11,6 @@ import React, { useEffect, useState, Suspense, useRef } from "react";
 import { buildModel, processImages, predictDirection } from "../model";
 import {
     batchArrayAtom,
-    dataFlagAtom,
     dataSetSizeAtom,
     trainingProgressAtom,
     lossAtom,
@@ -76,7 +75,6 @@ export default function MLTrain({ webcamRef }) {
 
     // ---- UI Display ----
     const [lossVal, setLossVal] = useAtom(lossAtom);
-    const [dataFlag] = useAtom(dataFlagAtom);
     const [trainingProgress, setTrainingProgress] = useAtom(trainingProgressAtom);
     const [dataSetSize] = useAtom(dataSetSizeAtom);
     
@@ -140,7 +138,6 @@ export default function MLTrain({ webcamRef }) {
                 <Button
                     variant="contained"
                     color="primary"
-                    disabled={!dataFlag}
                     onClick={() => {
                         trainingProgress == -1? trainModel() : stopTrain();
                     }}
@@ -186,7 +183,7 @@ export default function MLTrain({ webcamRef }) {
                         batchValueArray,
                         setBatchSize,
                         batchSize,
-                        !dataFlag
+                        false
                     )}
 
                     {/* <label>Hidden units</label> */}
