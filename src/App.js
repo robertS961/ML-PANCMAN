@@ -3,7 +3,7 @@ import PacMan from "./components/PacMan";
 import MLTrain from "./components/MLTrain";
 import DataCollection from "./components/DataCollection";
 import AllTrainingImages from "./components/AllTrainingImages";
-import { predictionAtom } from "./GlobalState";
+import { predictionAtom, predictionConfidenceAtom } from "./GlobalState";
 import { useAtom } from "jotai";   
 import {
     Box,
@@ -19,7 +19,8 @@ import {
 export default function App() {
     const webcamRef = React.useRef(null);
     const [prediction] = useAtom(predictionAtom);
-
+    const [predictionConfidence] = useAtom(predictionConfidenceAtom);
+   
     // Map the prediction to labels
     const predictionLabel = {
         0: "Right",
@@ -87,6 +88,9 @@ export default function App() {
                                 <PacMan />
                                 <Typography variant="h5" sx={{ mt: 2, fontWeight: "bold" }}>
                                     Prediction: {predictionLabel}
+                                </Typography>
+                                <Typography variant="h5" sx={{ mt: 2, fontWeight: "bold" }}>
+                                    Confidence: {(predictionConfidence * 100).toFixed(2)}%
                                 </Typography>
                             </Paper>
                         </Grid>

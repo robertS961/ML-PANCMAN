@@ -133,35 +133,30 @@ export async function buildModel(
   return model;
 }
 
-export async function predict(truncatedMobileNet, model, img) {
-  const embeddings = truncatedMobileNet.predict(img);
-  const predictions = await model.predict(embeddings);
-  const predictedClass = predictions.as1D().argMax();
-  const classId = (await predictedClass.data())[0];
-  return classId;
-}
-
-
-export async function predictDirection(webcamRef, truncatedMobileNet, model) {
+export async function predictDirectionWithConfidence(webcamRef, truncatedMobileNet, model) {
   const newImageSrc = webcamRef.current.getScreenshot();
-  if (newImageSrc) {
-    const imgTensor = await base64ToTensor(newImageSrc);
-    const prediction = await predict(truncatedMobileNet, model, imgTensor);
-
-    switch (prediction) {
-      case 0:
-        return 1;
-      case 1:
-        return 3;
-      case 2:
-        return 2;
-      case 3:
-        return 0;
-      default:
-        return -1;
-    }
+  if (!newImageSrc) {
+    return { direction: -1, confidence: 0 };
   }
+  const imgTensor = await base64ToTensor(newImageSrc);
+  const embeddings = truncatedMobileNet.predict(imgTensor);
+  const prediction = await model.predict(embeddings);
+  const predictionArray = prediction.dataSync();
+  const classId = prediction.as1D().argMax().dataSync()[0];
+  const confidence = predictionArray[classId];
+  const direction = (() => {
+    switch (classId) {
+      case 0: return 1; // Up
+      case 1: return 3; // Downs
+      case 2: return 2; // Left
+      case 3: return 0; // Right
+      default: return -1;
+    }
+  })();
+
+  return { direction, confidence };
 }
+
 
 export async function base64ToTensor(base64) {
   return new Promise((resolve, reject) => {

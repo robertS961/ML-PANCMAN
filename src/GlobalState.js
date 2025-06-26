@@ -8,6 +8,8 @@ export const hiddenUnitsAtom = atom(100); // Number of hidden units
 export const learningRateAtom = atom(0.0001); // Learning rate
 export const gameRunningAtom = atom(false); // Game state
 export const predictionAtom = atom(null); // Current prediction
+export const predictionConfidenceAtom = atom(0); //Current Confidence of prediction
+
 
 // ---- Model Training ----
 export const modelAtom = atom(null); // Model

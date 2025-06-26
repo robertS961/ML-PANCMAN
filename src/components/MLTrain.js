@@ -8,7 +8,7 @@ import {
     LinearProgress,
 } from "@mui/material";
 import React, { useEffect, useState, Suspense, useRef } from "react";
-import { buildModel, processImages, predictDirection } from "../model";
+import { buildModel, processImages, predictDirectionWithConfidence } from "../model";
 import {
     batchArrayAtom,
     trainingProgressAtom,
@@ -23,6 +23,7 @@ import {
     imgSrcArrAtom,
     gameRunningAtom,
     predictionAtom,
+    predictionConfidenceAtom,
 } from "../GlobalState";
 import { useAtom } from "jotai";
 import { data, train } from "@tensorflow/tfjs";
@@ -64,6 +65,7 @@ export default function MLTrain({ webcamRef }) {
     const [hiddenUnits, setHiddenUnits] = useAtom(hiddenUnitsAtom);
     const [isRunning] = useAtom(gameRunningAtom);
     const [, setPredictionDirection] = useAtom(predictionAtom);
+    const [, setPredictionConfidence] = useAtom(predictionConfidenceAtom);
 
     // ---- Model Training ----
     const [model, setModel] = useAtom(modelAtom);
@@ -91,9 +93,9 @@ export default function MLTrain({ webcamRef }) {
     // Loop to predict direction
     async function runPredictionLoop() {
         while (isRunningRef.current) {
-            setPredictionDirection(
-                await predictDirection(webcamRef, truncatedMobileNet, model)
-            );
+            const predictionResult = await predictDirectionWithConfidence(webcamRef, truncatedMobileNet, model);
+            setPredictionDirection(predictionResult.direction);
+            setPredictionConfidence(predictionResult.confidence);
             await new Promise((resolve) => setTimeout(resolve, 250));
         }
     }
