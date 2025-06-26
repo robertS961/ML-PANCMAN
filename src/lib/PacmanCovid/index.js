@@ -128,11 +128,22 @@ export default class PacmanCovid extends Component {
           aria-describedby="alert-dialog-description"
         >
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              <p>You have been infected! </p>
-              <p> Score: {this.state.score}</p>
+            <DialogContentText>
+              You have been infected!
+            </DialogContentText>
+            <DialogContentText>
+              Score: {this.state.score}
             </DialogContentText>
           </DialogContent>
+          
+          {/*}
+          Cant use this as it is a <p> inside another <p>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              You have been infected! <span>Score: {this.state.score}</span>
+            </DialogContentText>
+          </DialogContent>
+          */}
         </Dialog>
       </div>
     );

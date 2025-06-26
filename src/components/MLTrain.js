@@ -8,7 +8,7 @@ import {
     LinearProgress,
 } from "@mui/material";
 import React, { useEffect, useState, Suspense, useRef } from "react";
-import { buildModel, processImages, predictDirectionWithConfidence } from "../model";
+import { buildModel, processImages, predictDirection, predictDirectionWithConfidence } from "../model";
 import {
     batchArrayAtom,
     trainingProgressAtom,
@@ -30,6 +30,7 @@ import { data, train } from "@tensorflow/tfjs";
 // import JSONWriter from "./JSONWriter";
 // import JSONLoader from "./JSONLoader";
 
+
 function generateSelectComponent(
     label,
     options,
@@ -37,26 +38,31 @@ function generateSelectComponent(
     currentValue,
     isDisabled = false
 ) {
+    const id = label.toLowerCase().replace(/\s+/g, '-') + "-select";
     return (
         <>
-            <InputLabel id="demo-simple-select-label">{label}</InputLabel>
+            <InputLabel id={`${id}-label`}>{label}</InputLabel>
             <Select
                 size="small"
                 sx={{ minWidth: 120 }}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
+                labelId={`${id}-label`}
+                id={id}
                 value={currentValue}
                 label={label}
                 onChange={(e) => handleChange(e.target.value)}
                 disabled={isDisabled}
             >
                 {options.map((option) => (
-                    <MenuItem value={option}>{option}</MenuItem>
+                    <MenuItem key={option} value={option}>
+                        {option}
+                    </MenuItem>
                 ))}
             </Select>
         </>
     );
 }
+
+
 
 export default function MLTrain({ webcamRef }) {
     // ---- Configurations ----
@@ -111,7 +117,7 @@ export default function MLTrain({ webcamRef }) {
 
     // Train the model when called
     async function trainModel() {
-        setTrainingProgress("Stop");
+        setTrainingProgress(-1);
         const dataset = await processImages(imgSrcArr, truncatedMobileNet);
         const model = await buildModel(truncatedMobileNet,
             setLossVal,
@@ -146,15 +152,16 @@ export default function MLTrain({ webcamRef }) {
                 >
                     {trainingProgress == -1 ? "Train" : lossVal? "Stop": 'Loading...'}
                 </Button>
-                <LinearProgress
-                    variant="determinate"
-                    value={trainingProgress}
-                    style={{
-                        display: trainingProgress === 0 ? "none" : "block",
-                        width: "75%",
-                        marginTop: "10px",
-                    }}
-                />
+                    {typeof trainingProgress === "number" && trainingProgress >= 0 && (
+                        <LinearProgress
+                            variant="determinate"
+                            value={trainingProgress}
+                            style={{
+                            width: "75%",
+                            marginTop: "10px",
+                            }}
+                        />
+                    )}
                 <Typography variant="h6">
                     LOSS: {lossVal === null ? "" : lossVal} <br />
                     Dataset Size: {imgSrcArr.length} <br />
