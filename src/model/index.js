@@ -141,6 +141,7 @@ export async function predict(truncatedMobileNet, model, img) {
   return classId;
 }
 
+
 export async function predictDirection(webcamRef, truncatedMobileNet, model) {
   const newImageSrc = webcamRef.current.getScreenshot();
   if (newImageSrc) {

@@ -3,6 +3,8 @@ import PacMan from "./components/PacMan";
 import MLTrain from "./components/MLTrain";
 import DataCollection from "./components/DataCollection";
 import AllTrainingImages from "./components/AllTrainingImages";
+import { predictionAtom } from "./GlobalState";
+import { useAtom } from "jotai";   
 import {
     Box,
     CssBaseline,
@@ -16,6 +18,16 @@ import {
 
 export default function App() {
     const webcamRef = React.useRef(null);
+    const [prediction] = useAtom(predictionAtom);
+
+    // Map the prediction to labels
+    const predictionLabel = {
+        0: "Right",
+        1: "Up",
+        2: "Left",
+        3: "Down",
+        '-1': "No prediction",
+    }[prediction] || "No prediction";
 
     return (
         <Box sx={{ display: "flex" }}>
@@ -73,6 +85,9 @@ export default function App() {
                         <Grid item xs={12} md={6} lg={6}>
                             <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
                                 <PacMan />
+                                <Typography variant="h5" sx={{ mt: 2, fontWeight: "bold" }}>
+                                    Prediction: {predictionLabel}
+                                </Typography>
                             </Paper>
                         </Grid>
                         <Grid item xs={12}>
