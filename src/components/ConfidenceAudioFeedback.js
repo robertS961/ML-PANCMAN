@@ -38,7 +38,7 @@ export default function ConfidenceAudioFeedback() {
     };
   }, []);
 
-  // Handle confidence and game state changes
+  // Watch for changes in confidence or game status
   useEffect(() => {
     if (!isRunning) {
       stopCurrentAudio();
