@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from 'react';
 import PacMan from "./components/PacMan";
 import MLTrain from "./components/MLTrain";
 import DataCollection from "./components/DataCollection";
 import AllTrainingImages from "./components/AllTrainingImages";
+import AIInfoDialog from "./components/AIInfoDialog";
 import { predictionAtom, predictionConfidenceAtom } from "./GlobalState";
 import { useAtom } from "jotai";   
 import {
     Box,
+    Button,
     CssBaseline,
     AppBar,
     Toolbar,
@@ -36,12 +38,15 @@ export default function App() {
             <AppBar position="absolute">
                 <Toolbar
                     sx={{
-                        pl: "24px", // left padding
+                        pl: "24px",
+                        pr: "24px",
+                        justifyContent: "space-between",
                     }}
                 >
                     <Typography component="h1" variant="h3" color="inherit" noWrap>
                         Control PAC MAN via the camera!
                     </Typography>
+                    <AIInfoDialog />
                 </Toolbar>
             </AppBar>
 
