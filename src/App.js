@@ -5,6 +5,7 @@ import DataCollection from "./components/DataCollection";
 import AllTrainingImages from "./components/AllTrainingImages";
 import AIInfoDialog from "./components/AIInfoDialog";
 import { predictionAtom, predictionConfidenceAtom } from "./GlobalState";
+import ConfidenceAudioFeedback from "./components/ConfidenceAudioFeedback";
 import { useAtom } from "jotai";   
 import {
     Box,
@@ -22,9 +23,11 @@ export default function App() {
     const webcamRef = React.useRef(null);
     const [prediction] = useAtom(predictionAtom);
     const [predictionConfidence] = useAtom(predictionConfidenceAtom);
+
+    // Also will add sounds based on the label prediction accuracy
    
     // Map the prediction to labels
-    // Also will add sounds based on the label prediction accuracy
+    
     const predictionLabel = {
         0: "Right",
         1: "Up",
@@ -35,6 +38,7 @@ export default function App() {
 
     return (
         <Box sx={{ display: "flex" }}>
+            <ConfidenceAudioFeedback />
             <CssBaseline />
             <AppBar position="absolute">
                 <Toolbar
@@ -96,6 +100,7 @@ export default function App() {
                                     Prediction: {predictionLabel}
                                 </Typography>
                                 <Typography variant="h5" sx={{ mt: 2, fontWeight: "bold" }}>
+    
                                     Confidence: {(predictionConfidence * 100).toFixed(2)}%
                                 </Typography>
                             </Paper>
@@ -108,6 +113,7 @@ export default function App() {
                     </Grid>
                 </Container>
             </Box>
+            
         </Box>
     );
 }
