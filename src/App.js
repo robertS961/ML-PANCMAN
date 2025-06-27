@@ -23,7 +23,6 @@ export default function App() {
     const webcamRef = React.useRef(null);
     const [prediction] = useAtom(predictionAtom);
     const [predictionConfidence] = useAtom(predictionConfidenceAtom);
-
     // Also will add sounds based on the label prediction accuracy
    
     // Map the prediction to labels
@@ -35,6 +34,7 @@ export default function App() {
         3: "Down",
         '-1': "No prediction",
     }[prediction] || "No prediction";
+
 
     return (
         <Box sx={{ display: "flex" }}>

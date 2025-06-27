@@ -1,23 +1,29 @@
 import { useEffect, useRef } from "react";
 import { useAtom } from "jotai";
 import { predictionConfidenceAtom, gameRunningAtom } from "../GlobalState";
+import low_sound from "../lib/PacmanCovid/assets/sound/die.mp3"
+import medium_sound from "../lib/PacmanCovid/assets/sound/eating.mp3"
+import high_sound from "../lib/PacmanCovid/assets/sound/opening_song.mp3"
 
 export default function ConfidenceAudioFeedback() {
   const [confidence] = useAtom(predictionConfidenceAtom);
   const [isRunning] = useAtom(gameRunningAtom);
 
-  // Refs for the audio tracks
   const lowRef = useRef(null);
   const mediumRef = useRef(null);
   const highRef = useRef(null);
   const currentAudioRef = useRef(null);
   const lastBucketRef = useRef(null);
 
-  // Initialize audio objects only once
+  // Load audio once on mount
   useEffect(() => {
-    lowRef.current = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
-    mediumRef.current = new Audio("/audio/medium-confidence.mp3");
-    highRef.current = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
+    const low_audio = new Audio(low_sound);
+    const medium_audio = new Audio(medium_sound);
+    const high_audio = new Audio(high_sound);
+
+    lowRef.current = low_audio;
+    mediumRef.current = medium_audio;
+    highRef.current = high_audio;
 
     [lowRef, mediumRef, highRef].forEach(ref => {
       ref.current.loop = true;
@@ -25,7 +31,6 @@ export default function ConfidenceAudioFeedback() {
     });
 
     return () => {
-      // Stop all on unmount
       [lowRef, mediumRef, highRef].forEach(ref => {
         ref.current.pause();
         ref.current.currentTime = 0;
@@ -33,12 +38,12 @@ export default function ConfidenceAudioFeedback() {
     };
   }, []);
 
-  // Watch for changes in confidence or game status
+  // Handle confidence and game state changes
   useEffect(() => {
     if (!isRunning) {
-        stopCurrentAudio();
-        lastBucketRef.current = null; // Reset so audio can retrigger on next game
-        return;
+      stopCurrentAudio();
+      lastBucketRef.current = null;
+      return;
     }
 
     const bucket = getConfidenceBucket(confidence);
@@ -46,12 +51,11 @@ export default function ConfidenceAudioFeedback() {
       lastBucketRef.current = bucket;
       playAudioForBucket(bucket);
     }
-
   }, [confidence, isRunning]);
 
   function getConfidenceBucket(conf) {
-    if (conf < 0.60) return "low";
-    if (conf < 0.80) return "medium";
+    if (conf < 0.50) return "low";
+    if (conf < 0.75) return "medium";
     return "high";
   }
 
@@ -89,5 +93,5 @@ export default function ConfidenceAudioFeedback() {
     }
   }
 
-  return null; // No visual output
+  return null; // No visible UI
 }
