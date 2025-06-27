@@ -34,6 +34,7 @@ export default function ConfidenceAudioFeedback() {
   }, []);
 
   // Watch for changes in confidence or game status
+  // NEed to fix the audio to get pacman sounds. Using normal audio for now
   useEffect(() => {
     if (!isRunning) {
         stopCurrentAudio();
