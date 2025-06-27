@@ -24,6 +24,7 @@ export default function App() {
     const [predictionConfidence] = useAtom(predictionConfidenceAtom);
    
     // Map the prediction to labels
+    // Also will add sounds based on the label prediction accuracy
     const predictionLabel = {
         0: "Right",
         1: "Up",
