@@ -119,7 +119,7 @@ export default function AIInfoDialog() {
                                     <FiberManualRecordIcon fontSize="small" />
                                 </ListItemIcon>
                                 <ListItemText
-                                    primary="The music will change based on the prediction value. The intro music will play if the AI is Confident (prediction > 80%). The eating music will play if the AI is pretty sure (prediction > 60 %). The death music will play if the AI isn't confident (prediction < 50 %)."
+                                    primary="The AI will change the music based on its prediction accuracy. It will play the Intro, Eating, or Death jingle based on a strong, medium, or weak prediction!"
                                 />
                             </ListItem>
                         </List>
