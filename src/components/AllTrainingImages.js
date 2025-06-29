@@ -13,6 +13,8 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -22,6 +24,12 @@ export default function AllTrainingImages() {
 
   const handleDelete = (index) => {
     setImgToDelete(index);
+  };
+
+  const handleLabelChange = (index, newLabel) => {
+    const updatedImages = [...imgSrcArr];
+    updatedImages[index] = { ...updatedImages[index], label: newLabel };
+    setImgSrcArr(updatedImages);
   };
  
   const confirmDelete = () => {
@@ -34,6 +42,7 @@ export default function AllTrainingImages() {
   const cancelDelete = () => {
     setImgToDelete(null);
   };
+
 
   if (!imgSrcArr.length) {
     return (
@@ -75,16 +84,20 @@ export default function AllTrainingImages() {
                 <DeleteIcon fontSize="large" />
               </IconButton>
               <img src={img.src} alt={img.label} style={{ maxWidth: "100%" }} />
-              <Typography variant="caption" style={{ 
-                fontSize: "1rem", 
-                display: "block", 
-                marginTop: "8px", 
-                fontWeight: 600, 
-                textTransform: "uppercase",
-                }}
-                >
-                {img.label}
-              </Typography>
+            <Select
+                value={img.label}
+                onChange={(e) => handleLabelChange(index, e.target.value)}
+                size="small"
+                fullWidth
+                variant="standard"
+                sx={{ mt: 1, fontWeight: 600, textTransform: "uppercase" }}
+            >
+                {["up", "down", "left", "right"].map((label) => (
+                    <MenuItem key={label} value={label}>
+                    {label.toUpperCase()}
+                    </MenuItem>
+                ))}
+            </Select>
             </Paper>
           </Grid>
         ))}
