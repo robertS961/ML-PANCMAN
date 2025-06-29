@@ -114,6 +114,14 @@ export default function AIInfoDialog() {
                                     primary="Careful when training the AI to provide clear photos. Watch your hands, face, background, and variable surroundings."
                                 />
                             </ListItem>
+                            <ListItem>
+                                <ListItemIcon>
+                                    <FiberManualRecordIcon fontSize="small" />
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary="The music will change based on the prediction value. The intro music will play if the AI is Confident (prediction > 80%). The eating music will play if the AI is pretty sure (prediction > 60 %). The death music will play if the AI isn't confident (prediction < 50 %)."
+                                />
+                            </ListItem>
                         </List>
                     </Box>
                 </DialogContent>
