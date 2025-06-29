@@ -84,10 +84,16 @@ export default function MLTrain({ webcamRef }) {
 
 
     const [batchSize, setBatchSize] = useAtom(batchSizeAtom);
-    const rawBatchValues = [0.05, 0.1, 0.4, 1]
-    .map(r => Math.max(1, Math.floor(imgSrcArr.length * r))); // Avoid 0
+    const rawBatchValues = [0.05, 0.1, 0.4, 1].map(r => Math.max(1, Math.floor(imgSrcArr.length * r))); // Avoid 0
     const batchValueArray = Array.from(new Set(rawBatchValues)); // Remove duplicates
     
+    // Ensure selected batchSize is valid
+    useEffect(() => {
+        if (!batchValueArray.includes(batchSize)) {
+            setBatchSize(batchValueArray[0]); // Set to first valid option
+        }
+    }, [imgSrcArr.length]);
+
     const [, setStopTraining] = useAtom(stopTrainingAtom);
 
     // Reference to update isRunning
@@ -97,6 +103,8 @@ export default function MLTrain({ webcamRef }) {
     useEffect(() => {
         isRunningRef.current = isRunning;
     }, [isRunning]);
+
+
 
     // Loop to predict direction
     async function runPredictionLoop() {
