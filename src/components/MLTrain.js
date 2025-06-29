@@ -82,11 +82,12 @@ export default function MLTrain({ webcamRef }) {
     const [lossVal, setLossVal] = useAtom(lossAtom);
     const [trainingProgress, setTrainingProgress] = useAtom(trainingProgressAtom);
 
-
+ 
     const [batchSize, setBatchSize] = useAtom(batchSizeAtom);
     const rawBatchValues = [0.05, 0.1, 0.4, 1].map(r => Math.max(1, Math.floor(imgSrcArr.length * r))); // Avoid 0
     const batchValueArray = Array.from(new Set(rawBatchValues)); // Remove duplicates
-    
+    // console.log("Batch size:", batchSize);
+    // console.log("Batch options:", batchValueArray);
     // Ensure selected batchSize is valid
     useEffect(() => {
         if (!batchValueArray.includes(batchSize)) {
