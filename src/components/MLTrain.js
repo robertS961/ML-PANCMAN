@@ -84,7 +84,7 @@ export default function MLTrain({ webcamRef }) {
 
 
     const [batchSize, setBatchSize] = useAtom(batchSizeAtom);
-    const batchValueArray = [0.05, 0.1, 0.4, 1].map(r=>Math.floor(imgSrcArr.length * r));
+    const batchValueArray = [0.05, 0.1, 0.4, 1].map(r=> Math.max(1, Math.floor(imgSrcArr.length * r)));
     
     const [, setStopTraining] = useAtom(stopTrainingAtom);
 
