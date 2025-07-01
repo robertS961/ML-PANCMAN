@@ -45,7 +45,7 @@ export default function DataCollection({ webcamRef }) {
             // Add example to the dataset
             const newImageArr = [...imgSrcArr, { src: newImageSrc, label: direction }];
             setImgSrcArr(newImageArr);
-            setBatchSize(Math.max(1,Math.floor(newImageArr.length * 0.4)));
+            setBatchSize(Math.max(1,Math.floor(newImageArr.length * 0.4))); // gives error of 1, changed
         }
     };
 
