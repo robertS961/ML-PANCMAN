@@ -58,70 +58,70 @@ export default function AIInfoDialog() {
                 <DialogContent dividers>
                     <Box textAlign="center" px={2}>
                         <List sx={{ textAlign: "left", margin: "auto", maxWidth: 500 }}>
-                            <ListItem>
-                                <ListItemIcon>
-                                    <FiberManualRecordIcon fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary="The AI is built on a truncated MobileNet. This is a convolutional neural network! This means the AI operates on images!"
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <ListItemIcon>
-                                    <FiberManualRecordIcon fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary="Hit 'Start Camera', then select the arrow for the direction that the image corresponds too. All of these images will train the AI(shown below)!"
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <ListItemIcon>
-                                    <FiberManualRecordIcon fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary="Once all the images are collected. Hit 'Train', this will train the AI to recognize the Image with that specific direction."
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <ListItemIcon>
-                                    <FiberManualRecordIcon fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary="After 'Train', hit 'Start'. The AI will then take screen shots in real time. It will then predict the direction based off the screen shot."
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <ListItemIcon>
-                                    <FiberManualRecordIcon fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary="You’ll see the predicted direction and the confidence of the AI in real time."
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <ListItemIcon>
-                                    <FiberManualRecordIcon fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary="If the AI misreads the input you can overwrite it by using WASD or the arrow keys."
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <ListItemIcon>
-                                    <FiberManualRecordIcon fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary="Careful when training the AI to provide clear photos. Watch your hands, face, background, and variable surroundings."
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <ListItemIcon>
-                                    <FiberManualRecordIcon fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary="The AI will change the music based on its prediction accuracy. It will play the Intro, Eating, or Death jingle based on a strong, medium, or weak prediction!"
-                                />
-                            </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                            <FiberManualRecordIcon fontSize="small" />
+                            </ListItemIcon>
+                            <ListItemText
+                            primary="This AI is built on a truncated MobileNet, a convolutional neural network that processes images!"
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                            <FiberManualRecordIcon fontSize="small" />
+                            </ListItemIcon>
+                            <ListItemText
+                            primary="Click 'Start Camera', then select the arrow that matches the direction in the image. These labeled images will be used to train the AI (see below)!"
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                            <FiberManualRecordIcon fontSize="small" />
+                            </ListItemIcon>
+                            <ListItemText
+                            primary="Once you've collected enough images, click 'Train' to teach the AI to recognize directions from screenshots."
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                            <FiberManualRecordIcon fontSize="small" />
+                            </ListItemIcon>
+                            <ListItemText
+                            primary="After training, click 'Start'. The AI will capture real-time screenshots and predict the direction based on what it sees."
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                            <FiberManualRecordIcon fontSize="small" />
+                            </ListItemIcon>
+                            <ListItemText
+                            primary="You'll see the predicted direction and the AI's confidence score updated live."
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                            <FiberManualRecordIcon fontSize="small" />
+                            </ListItemIcon>
+                            <ListItemText
+                            primary="If the AI makes a mistake, you can override it using the WASD or arrow keys."
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                            <FiberManualRecordIcon fontSize="small" />
+                            </ListItemIcon>
+                            <ListItemText
+                            primary="When training, ensure the images are clear. Avoid including hands, faces, busy backgrounds, or inconsistent surroundings."
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                            <FiberManualRecordIcon fontSize="small" />
+                            </ListItemIcon>
+                            <ListItemText
+                            primary="The background music changes based on prediction confidence, you’ll hear the intro, eating, or death jingle based on high, medium, or low accuracy!"
+                            />
+                        </ListItem>
                         </List>
                     </Box>
                 </DialogContent>
